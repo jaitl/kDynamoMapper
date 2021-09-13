@@ -1,6 +1,5 @@
 package com.github.jaitl.dynamodb.mapper
 
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -29,8 +28,8 @@ class WriterTest {
         val simple = SimpleData("ddd", 123)
         val map = dWrite(simple)
         val expectedMap = mapOf(
-            "str" to AttributeValue.builder().s("ddd").build(),
-            "digit" to AttributeValue.builder().n("123").build()
+            "str" to stringAttribute("ddd"),
+            "digit" to numberAttribute(123)
         )
         assertEquals(expectedMap, map)
     }
@@ -44,12 +43,12 @@ class WriterTest {
         val map = dWrite(nested)
 
         val simpleDataMap = mapOf(
-            "str" to AttributeValue.builder().s("ddd").build(),
-            "digit" to AttributeValue.builder().n("123").build()
+            "str" to stringAttribute("ddd"),
+            "digit" to numberAttribute(123)
         )
         val expectedMap = mapOf(
-            "sometd" to AttributeValue.builder().s("abc").build(),
-            "data" to AttributeValue.builder().m(simpleDataMap).build()
+            "sometd" to stringAttribute("abc"),
+            "data" to mapAttribute(simpleDataMap)
         )
         assertEquals(expectedMap, map)
     }

@@ -3,6 +3,7 @@ package com.github.jaitl.dynamodb.mapper
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
+import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.memberProperties
 
 fun dWrite(obj: Any): Map<String, AttributeValue> {
@@ -15,12 +16,15 @@ fun dWrite(obj: Any): Map<String, AttributeValue> {
 }
 
 internal fun matchAttribute(prop: KProperty1<out Any, *>, obj: Any): AttributeValue {
-    if ((prop.returnType.classifier as KClass<*>).isData) {
-        return AttributeValue.builder().m(dWrite(prop.getter.call(obj) as Any)).build()
+    val clazz = prop.returnType.classifier as KClass<*>
+    if (clazz.isData) {
+        return mapAttribute(dWrite(prop.getter.call(obj) as Any))
+    }
+    if (clazz.isSubclassOf(Number::class)) {
+        return numberAttribute(prop.getter.call(obj) as Number)
     }
     return when (prop.returnType.classifier) {
-        String::class -> AttributeValue.builder().s(prop.getter.call(obj) as String).build()
-        Int::class -> AttributeValue.builder().n(prop.getter.call(obj).toString()).build()
+        String::class -> stringAttribute(prop.getter.call(obj) as String)
         else -> throw UnknownTypeException(prop.returnType.classifier)
     }
 }
