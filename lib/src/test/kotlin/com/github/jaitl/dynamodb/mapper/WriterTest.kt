@@ -3,7 +3,7 @@ package com.github.jaitl.dynamodb.mapper
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class WriterTest {
+internal class WriterTest {
     @Test(expected = NotDataClassTypeException::class)
     fun testIsntDataType() {
         class SomeClass(val data: String)
