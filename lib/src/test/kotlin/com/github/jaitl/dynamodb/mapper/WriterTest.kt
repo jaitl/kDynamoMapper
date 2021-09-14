@@ -22,6 +22,18 @@ class WriterTest {
     }
 
     @Test
+    fun testNullField() {
+        data class SimpleData(val str: String, val digit: Int?)
+
+        val simple = SimpleData("ddd", null)
+        val map = dWrite(simple)
+        val expectedMap = mapOf(
+            "str" to stringAttribute("ddd")
+        )
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
     fun testSimpleData() {
         data class SimpleData(val str: String, val digit: Int)
 
