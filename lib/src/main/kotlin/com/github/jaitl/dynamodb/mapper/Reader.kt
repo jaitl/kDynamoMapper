@@ -17,12 +17,15 @@ fun <T: Any>dRead(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
 }
 
 internal fun matchType(param: KParameter, obj: Map<String, AttributeValue>): Any? {
+    val clazz = param.type.classifier as KClass<*>
     val attr = obj[param.name]
     if (attr == null) {
         return null
     }
-
-    return when(param.type.classifier) {
+    if (clazz.isData) {
+        return dRead(attr.m(), clazz)
+    }
+    return when(clazz) {
         Int::class -> attr.n().toInt()
         String::class -> attr.s()
         else -> throw UnknownTypeException(param.type.classifier)

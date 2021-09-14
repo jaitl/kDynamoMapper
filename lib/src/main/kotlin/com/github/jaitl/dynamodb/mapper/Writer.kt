@@ -30,7 +30,7 @@ internal fun matchAttribute(prop: KProperty1<out Any, *>, obj: Any): AttributeVa
     if (clazz.isSubclassOf(Number::class)) {
         return numberAttribute(value as Number)
     }
-    return when (prop.returnType.classifier) {
+    return when (clazz) {
         String::class -> stringAttribute(value as String)
         else -> throw UnknownTypeException(prop.returnType.classifier)
     }

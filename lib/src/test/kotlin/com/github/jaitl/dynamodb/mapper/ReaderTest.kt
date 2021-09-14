@@ -49,4 +49,24 @@ internal class ReaderTest {
         val data = dRead(obj, SimpleData::class)
         assertEquals(expectedData, data)
     }
+
+    @Test
+    fun testNestedSimpleDataClass() {
+        data class SimpleData(val str: String, val digit: Int)
+        data class NestedData(val sometd: String, val data: SimpleData)
+
+        val nestedExpected = NestedData("abc", SimpleData("ddd", 123))
+        val simpleDataMap = mapOf(
+            "str" to stringAttribute("ddd"),
+            "digit" to numberAttribute(123)
+        )
+        val obj = mapOf(
+            "sometd" to stringAttribute("abc"),
+            "data" to mapAttribute(simpleDataMap)
+        )
+
+        val nested = dRead(obj, NestedData::class)
+
+        assertEquals(nestedExpected, nested)
+    }
 }
