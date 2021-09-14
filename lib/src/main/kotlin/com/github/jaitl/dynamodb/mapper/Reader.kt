@@ -16,8 +16,11 @@ fun <T: Any>dRead(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
     return constructor.callBy(params)
 }
 
-internal fun matchType(param: KParameter, obj: Map<String, AttributeValue>): Any {
-    val attr = obj[param.name]!!
+internal fun matchType(param: KParameter, obj: Map<String, AttributeValue>): Any? {
+    val attr = obj[param.name]
+    if (attr == null) {
+        return null
+    }
 
     return when(param.type.classifier) {
         Int::class -> attr.n().toInt()
