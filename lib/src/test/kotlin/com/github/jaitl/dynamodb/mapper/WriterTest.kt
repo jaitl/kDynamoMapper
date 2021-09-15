@@ -81,7 +81,42 @@ internal class WriterTest {
             "inst" to instantAttribute(data.inst)
         )
 
-        println(expectedMap)
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
+    fun testStringList() {
+        data class Data(val list: List<String>)
+
+        val data = Data(listOf("1", "2", "3"))
+
+        val map = dWrite(data)
+
+        val list = listAttribute(
+            stringAttribute("1"),
+            stringAttribute("2"),
+            stringAttribute("3"),
+        )
+        val expectedMap = mapOf("list" to list)
+
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
+    fun testDataClassList() {
+        data class SimpleData(val vvv: Int)
+        data class Data(val list: List<SimpleData>)
+
+        val data = Data(listOf(SimpleData(1), SimpleData(2), SimpleData(3)))
+
+        val map = dWrite(data)
+
+        val list = listAttribute(
+            mapAttribute(mapOf("vvv" to numberAttribute(1))),
+            mapAttribute(mapOf("vvv" to numberAttribute(2))),
+            mapAttribute(mapOf("vvv" to numberAttribute(3))),
+        )
+        val expectedMap = mapOf("list" to list)
 
         assertEquals(expectedMap, map)
     }
