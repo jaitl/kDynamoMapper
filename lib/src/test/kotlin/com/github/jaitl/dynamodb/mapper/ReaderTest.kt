@@ -88,4 +88,41 @@ internal class ReaderTest {
 
         assertEquals(dataExpected, data)
     }
+
+    @Test
+    fun testStringList() {
+        data class Data(val list: List<String>)
+
+        val expectedData = Data(listOf("1", "2", "3"))
+
+        val list = listAttribute(
+            stringAttribute("1"),
+            stringAttribute("2"),
+            stringAttribute("3"),
+        )
+        val obj = mapOf("list" to list)
+
+        val data = dRead(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
+
+    @Test
+    fun testDataClassList() {
+        data class SimpleData(val vvv: Int)
+        data class Data(val list: List<SimpleData>)
+
+        val expectedData = Data(listOf(SimpleData(1), SimpleData(2), SimpleData(3)))
+
+        val list = listAttribute(
+            mapAttribute(mapOf("vvv" to numberAttribute(1))),
+            mapAttribute(mapOf("vvv" to numberAttribute(2))),
+            mapAttribute(mapOf("vvv" to numberAttribute(3))),
+        )
+        val obj = mapOf("list" to list)
+
+        val data = dRead(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
 }
