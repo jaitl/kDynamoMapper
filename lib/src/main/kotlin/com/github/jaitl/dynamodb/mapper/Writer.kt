@@ -5,6 +5,7 @@ import java.time.Instant
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
+import kotlin.reflect.KType
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.memberProperties
 
@@ -21,15 +22,15 @@ fun dWrite(obj: Any): Map<String, AttributeValue> {
 }
 
 internal fun handleProperty(prop: KProperty1<out Any, *>, obj: Any): AttributeValue? {
-    val clazz = prop.returnType.classifier as KClass<*>
     val value: Any? = prop.getter.call(obj)
     if (value == null) {
         return null
     }
-    return matchClassToAttribute(value, clazz)
+    return matchClassToAttribute(value, prop.returnType)
 }
 
-internal fun matchClassToAttribute(value: Any, clazz: KClass<*>): AttributeValue {
+internal fun matchClassToAttribute(value: Any, kType: KType): AttributeValue {
+    val clazz = kType.classifier as KClass<*>
     if (clazz.isData) {
         return mapAttribute(dWrite(value))
     }
@@ -37,7 +38,7 @@ internal fun matchClassToAttribute(value: Any, clazz: KClass<*>): AttributeValue
         return numberAttribute(value as Number)
     }
     if (clazz.isSubclassOf(List::class)) {
-        return handleList(value as List<*>)
+        return handleList(value as List<*>, kType)
     }
     return when (clazz) {
         String::class -> stringAttribute(value as String)
@@ -48,9 +49,10 @@ internal fun matchClassToAttribute(value: Any, clazz: KClass<*>): AttributeValue
     }
 }
 
-internal fun handleList(value: List<*>): AttributeValue {
+internal fun handleList(value: List<*>, kType: KType): AttributeValue {
+    val listType = kType.arguments.first().type!!
     val list = value
         .filterNotNull()
-        .map { matchClassToAttribute(it, it::class) }
+        .map { matchClassToAttribute(it, listType) }
     return listAttribute(list)
 }
