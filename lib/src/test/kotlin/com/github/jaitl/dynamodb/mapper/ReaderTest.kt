@@ -1,5 +1,7 @@
 package com.github.jaitl.dynamodb.mapper
 
+import java.time.Instant
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -68,5 +70,22 @@ internal class ReaderTest {
         val nested = dRead(obj, NestedData::class)
 
         assertEquals(nestedExpected, nested)
+    }
+
+    @Test
+    fun testCommonTypes() {
+        data class TypeData(val id: UUID, val bool: Boolean, val inst: Instant)
+
+        val dataExpected = TypeData(UUID.randomUUID(), true, Instant.now())
+
+        val obj = mapOf(
+            "id" to uuidAttribute(dataExpected.id),
+            "bool" to booleanAttribute(dataExpected.bool),
+            "inst" to instantAttribute(dataExpected.inst)
+        )
+
+        val data = dRead(obj, TypeData::class)
+
+        assertEquals(dataExpected, data)
     }
 }

@@ -1,6 +1,9 @@
 package com.github.jaitl.dynamodb.mapper
 
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.isSubclassOf
@@ -31,6 +34,9 @@ internal fun matchType(param: KParameter, obj: Map<String, AttributeValue>): Any
     }
     return when(clazz) {
         String::class -> attr.s()
+        Boolean::class -> attr.bool()
+        UUID::class -> UUID.fromString(attr.s())
+        Instant::class -> DateTimeFormatter.ISO_INSTANT.parse(attr.s(), Instant::from)
         else -> throw UnknownTypeException(param.type.classifier)
     }
 }
@@ -40,10 +46,9 @@ internal fun parseNumber(str: String, clazz: KClass<*>): Number {
         Byte::class -> str.toByte()
         Short::class -> str.toShort()
         Int::class -> str.toInt()
-        Int::class -> str.toInt()
         Long::class -> str.toLong()
-        Double::class -> str.toDouble()
         Float::class -> str.toFloat()
+        Double::class -> str.toDouble()
         else -> throw UnknownTypeException(clazz)
     }
 }

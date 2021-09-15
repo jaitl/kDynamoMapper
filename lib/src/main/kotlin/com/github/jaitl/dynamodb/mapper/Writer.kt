@@ -1,6 +1,8 @@
 package com.github.jaitl.dynamodb.mapper
 
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import java.time.Instant
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.isSubclassOf
@@ -32,6 +34,9 @@ internal fun matchAttribute(prop: KProperty1<out Any, *>, obj: Any): AttributeVa
     }
     return when (clazz) {
         String::class -> stringAttribute(value as String)
-        else -> throw UnknownTypeException(prop.returnType.classifier)
+        Boolean::class -> booleanAttribute(value as Boolean)
+        Instant::class -> instantAttribute(value as Instant)
+        UUID::class -> uuidAttribute(value as UUID)
+        else -> throw UnknownTypeException(clazz)
     }
 }

@@ -1,5 +1,7 @@
 package com.github.jaitl.dynamodb.mapper
 
+import java.time.Instant
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -62,6 +64,25 @@ internal class WriterTest {
             "sometd" to stringAttribute("abc"),
             "data" to mapAttribute(simpleDataMap)
         )
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
+    fun testCommonTypes() {
+        data class TypeData(val id: UUID, val bool: Boolean, val inst: Instant)
+
+        val data = TypeData(UUID.randomUUID(), true, Instant.now())
+
+        val map = dWrite(data)
+
+        val expectedMap = mapOf(
+            "id" to uuidAttribute(data.id),
+            "bool" to booleanAttribute(data.bool),
+            "inst" to instantAttribute(data.inst)
+        )
+
+        println(expectedMap)
+
         assertEquals(expectedMap, map)
     }
 }
