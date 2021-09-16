@@ -7,6 +7,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.KType
 import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.memberProperties
 
 fun dWrite(obj: Any): Map<String, AttributeValue> {
@@ -40,6 +41,9 @@ internal fun matchClassToAttribute(value: Any, kType: KType): AttributeValue {
     if (clazz.isSubclassOf(List::class)) {
         return handleList(value as List<*>, kType)
     }
+    if (clazz.isSubclassOf(Set::class)) {
+        return handleSet(value as Set<*>, kType)
+    }
     return when (clazz) {
         String::class -> stringAttribute(value as String)
         Boolean::class -> booleanAttribute(value as Boolean)
@@ -55,4 +59,25 @@ internal fun handleList(value: List<*>, kType: KType): AttributeValue {
         .filterNotNull()
         .map { matchClassToAttribute(it, listType) }
     return listAttribute(list)
+}
+
+internal fun handleSet(value: Set<*>, kType: KType): AttributeValue {
+    val setType = kType.arguments.first().type!!
+    val clazz = setType.classifier as KClass<*>
+
+    if (clazz.isSubclassOf(Number::class)) {
+        val set = value.filterNotNull().map { it.toString() }.toSet()
+        return numberSetAttribute(set)
+    }
+
+    return when(clazz) {
+        String::class -> stringSetAttribute(value as Set<String>)
+        else -> {
+            val set = value
+                .filterNotNull()
+                .map { matchClassToAttribute(it, setType) }
+                .toList()
+            return setAttribute(set)
+        }
+    }
 }

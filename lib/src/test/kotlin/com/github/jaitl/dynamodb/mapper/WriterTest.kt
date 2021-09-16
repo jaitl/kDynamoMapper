@@ -120,4 +120,51 @@ internal class WriterTest {
 
         assertEquals(expectedMap, map)
     }
+
+    @Test
+    fun testStringSet() {
+        data class Data(val set: Set<String>)
+
+        val data = Data(setOf("1", "2", "3"))
+
+        val map = dWrite(data)
+
+        val set = stringSetAttribute("1", "2", "3")
+        val expectedMap = mapOf("set" to set)
+
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
+    fun testNumberSet() {
+        data class Data(val set: Set<Int>)
+
+        val data = Data(setOf(1, 2, 3))
+
+        val map = dWrite(data)
+
+        val set = numberSetAttribute("1", "2", "3")
+        val expectedMap = mapOf("set" to set)
+
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
+    fun testObjectSet() {
+        data class SimpleData(val vvv: Int)
+        data class Data(val set: Set<SimpleData>)
+
+        val data = Data(setOf(SimpleData(1), SimpleData(2), SimpleData(3)))
+
+        val map = dWrite(data)
+
+        val set = setAttribute(
+            mapAttribute(mapOf("vvv" to numberAttribute(1))),
+            mapAttribute(mapOf("vvv" to numberAttribute(2))),
+            mapAttribute(mapOf("vvv" to numberAttribute(3))),
+        )
+        val expectedMap = mapOf("set" to set)
+
+        assertEquals(expectedMap, map)
+    }
 }
