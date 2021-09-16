@@ -10,8 +10,8 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.primaryConstructor
 
-fun <T: Any>dRead(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
-    if(!clazz.isData) {
+fun <T : Any> dRead(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
+    if (!clazz.isData) {
         throw NotDataClassTypeException(clazz)
     }
     val constructor = clazz.primaryConstructor!!
@@ -43,7 +43,10 @@ internal fun matchAttributeToClass(attr: AttributeValue, kType: KType): Any {
     if (clazz.isSubclassOf(Set::class)) {
         return matchSet(attr, kType)
     }
-    return when(clazz) {
+    if (clazz.isSubclassOf(Map::class)) {
+        return matchMap(attr, kType)
+    }
+    return when (clazz) {
         String::class -> attr.s()
         Boolean::class -> attr.bool()
         UUID::class -> UUID.fromString(attr.s())
@@ -64,15 +67,28 @@ internal fun matchSet(attr: AttributeValue, kType: KType): Any {
     if (clazz.isSubclassOf(Number::class)) {
         return attr.ns().map { parseNumber(it, clazz) }.toSet()
     }
-    
-    return when(clazz) {
+
+    return when (clazz) {
         String::class -> attr.ss().toSet()
         else -> attr.l().filterNotNull().map { matchAttributeToClass(it, setType) }.toSet()
     }
 }
 
+internal fun matchMap(attr: AttributeValue, kType: KType): Any {
+    val keyType = kType.arguments.first().type!!
+    val keyClazz = keyType.classifier as KClass<*>
+
+    if (keyClazz != String::class) {
+        throw UnsupportedKeyTypeException(keyClazz)
+    }
+
+    val valueType = kType.arguments.last().type!!
+
+    return attr.m().mapNotNull { it.key!! to matchAttributeToClass(it.value!!, valueType) }.toMap()
+}
+
 internal fun parseNumber(str: String, clazz: KClass<*>): Number {
-    return when(clazz) {
+    return when (clazz) {
         Byte::class -> str.toByte()
         Short::class -> str.toShort()
         Int::class -> str.toInt()

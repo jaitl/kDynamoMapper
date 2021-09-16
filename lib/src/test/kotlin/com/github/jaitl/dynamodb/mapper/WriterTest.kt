@@ -177,7 +177,7 @@ internal class WriterTest {
     }
 
     @Test
-    fun testMap() {
+    fun testObjectMap() {
         data class SimpleData(val num: Int)
         data class Data(val map: Map<String, SimpleData>)
 
@@ -196,7 +196,7 @@ internal class WriterTest {
     }
 
     @Test
-    fun testObjectMap() {
+    fun testStringMap() {
         data class Data(val map: Map<String, String>)
 
         val data = Data(mapOf("a" to "a", "b" to "b", "c" to "c"))

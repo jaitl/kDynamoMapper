@@ -172,4 +172,51 @@ internal class ReaderTest {
 
         assertEquals(expectedData, data)
     }
+
+    @Test(expected = UnsupportedKeyTypeException::class)
+    fun testMapUnsupportedKey() {
+        data class Data(val map: Map<Int, Int>)
+
+        val dataMap = mapAttribute(mapOf())
+        val obj = mapOf("map" to dataMap)
+
+        dRead(obj, Data::class)
+    }
+
+    @Test
+    fun testObjectMap() {
+        data class SimpleData(val num: Int)
+        data class Data(val map: Map<String, SimpleData>)
+
+        val expectedData = Data(mapOf("a" to SimpleData(1), "b" to SimpleData(2), "c" to SimpleData(3)))
+
+        val dataMap = mapAttribute(mapOf(
+            "a" to mapAttribute(mapOf("num" to numberAttribute(1))),
+            "b" to mapAttribute(mapOf("num" to numberAttribute(2))),
+            "c" to mapAttribute(mapOf("num" to numberAttribute(3)))
+        ))
+        val obj = mapOf("map" to dataMap)
+
+        val data = dRead(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
+
+    @Test
+    fun testStringMap() {
+        data class Data(val map: Map<String, String>)
+
+        val expectedData = Data(mapOf("a" to "a", "b" to "b", "c" to "c"))
+
+        val dataMap = mapAttribute(mapOf(
+            "a" to stringAttribute("a"),
+            "b" to stringAttribute("b"),
+            "c" to stringAttribute("c")
+        ))
+        val obj = mapOf("map" to dataMap)
+
+        val data = dRead(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
 }
