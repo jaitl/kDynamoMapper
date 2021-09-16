@@ -125,4 +125,51 @@ internal class ReaderTest {
 
         assertEquals(expectedData, data)
     }
+
+    @Test
+    fun testStringSet() {
+        data class Data(val set: Set<String>)
+
+        val expectedData = Data(setOf("1", "2", "3"))
+
+        val set = stringSetAttribute("1", "2", "3")
+        val obj = mapOf("set" to set)
+
+        val data = dRead(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
+
+    @Test
+    fun testNumberSet() {
+        data class Data(val set: Set<Int>)
+
+        val expectedData = Data(setOf(1, 2, 3))
+
+        val set = numberSetAttribute("1", "2", "3")
+        val obj = mapOf("set" to set)
+
+        val data = dRead(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
+
+    @Test
+    fun testObjectSet() {
+        data class SimpleData(val vvv: Int)
+        data class Data(val set: Set<SimpleData>)
+
+        val expectedData = Data(setOf(SimpleData(1), SimpleData(2), SimpleData(3)))
+
+        val set = setAttribute(
+            mapAttribute(mapOf("vvv" to numberAttribute(1))),
+            mapAttribute(mapOf("vvv" to numberAttribute(2))),
+            mapAttribute(mapOf("vvv" to numberAttribute(3))),
+        )
+        val obj = mapOf("set" to set)
+
+        val data = dRead(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
 }

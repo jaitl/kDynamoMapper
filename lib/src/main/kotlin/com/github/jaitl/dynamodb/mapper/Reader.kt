@@ -40,6 +40,9 @@ internal fun matchAttributeToClass(attr: AttributeValue, kType: KType): Any {
     if (clazz.isSubclassOf(List::class)) {
         return matchList(attr, kType)
     }
+    if (clazz.isSubclassOf(Set::class)) {
+        return matchSet(attr, kType)
+    }
     return when(clazz) {
         String::class -> attr.s()
         Boolean::class -> attr.bool()
@@ -52,6 +55,20 @@ internal fun matchAttributeToClass(attr: AttributeValue, kType: KType): Any {
 internal fun matchList(attr: AttributeValue, kType: KType): Any {
     val listType = kType.arguments.first().type!!
     return attr.l().filterNotNull().map { matchAttributeToClass(it, listType) }
+}
+
+internal fun matchSet(attr: AttributeValue, kType: KType): Any {
+    val setType = kType.arguments.first().type!!
+    val clazz = setType.classifier as KClass<*>
+
+    if (clazz.isSubclassOf(Number::class)) {
+        return attr.ns().map { parseNumber(it, clazz) }.toSet()
+    }
+
+    return when(clazz) {
+        String::class -> attr.ss().toSet()
+        else -> attr.l().filterNotNull().map { matchAttributeToClass(it, setType) }.toSet()
+    }
 }
 
 internal fun parseNumber(str: String, clazz: KClass<*>): Number {
