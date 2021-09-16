@@ -167,4 +167,49 @@ internal class WriterTest {
 
         assertEquals(expectedMap, map)
     }
+
+    @Test(expected = UnsupportedKeyTypeException::class)
+    fun testMapUnsupportedKey() {
+        data class Data(val map: Map<Int, Int>)
+        val data = Data(mapOf(1 to 1, 2 to 2))
+
+        dWrite(data)
+    }
+
+    @Test
+    fun testMap() {
+        data class SimpleData(val num: Int)
+        data class Data(val map: Map<String, SimpleData>)
+
+        val data = Data(mapOf("a" to SimpleData(1), "b" to SimpleData(2), "c" to SimpleData(3)))
+
+        val map = dWrite(data)
+
+        val dataMap = mapAttribute(mapOf(
+            "a" to mapAttribute(mapOf("num" to numberAttribute(1))),
+            "b" to mapAttribute(mapOf("num" to numberAttribute(2))),
+            "c" to mapAttribute(mapOf("num" to numberAttribute(3)))
+        ))
+        val expectedMap = mapOf("map" to dataMap)
+
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
+    fun testObjectMap() {
+        data class Data(val map: Map<String, String>)
+
+        val data = Data(mapOf("a" to "a", "b" to "b", "c" to "c"))
+
+        val map = dWrite(data)
+
+        val dataMap = mapAttribute(mapOf(
+            "a" to stringAttribute("a"),
+            "b" to stringAttribute("b"),
+            "c" to stringAttribute("c")
+        ))
+        val expectedMap = mapOf("map" to dataMap)
+
+        assertEquals(expectedMap, map)
+    }
 }

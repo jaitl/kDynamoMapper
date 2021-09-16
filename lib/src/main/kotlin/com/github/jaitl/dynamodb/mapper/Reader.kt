@@ -64,7 +64,7 @@ internal fun matchSet(attr: AttributeValue, kType: KType): Any {
     if (clazz.isSubclassOf(Number::class)) {
         return attr.ns().map { parseNumber(it, clazz) }.toSet()
     }
-
+    
     return when(clazz) {
         String::class -> attr.ss().toSet()
         else -> attr.l().filterNotNull().map { matchAttributeToClass(it, setType) }.toSet()

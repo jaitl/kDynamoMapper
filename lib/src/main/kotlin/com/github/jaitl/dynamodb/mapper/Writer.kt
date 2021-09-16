@@ -44,6 +44,9 @@ internal fun matchClassToAttribute(value: Any, kType: KType): AttributeValue {
     if (clazz.isSubclassOf(Set::class)) {
         return handleSet(value as Set<*>, kType)
     }
+    if (clazz.isSubclassOf(Map::class)) {
+        return handleMap(value as Map<*, *>, kType)
+    }
     return when (clazz) {
         String::class -> stringAttribute(value as String)
         Boolean::class -> booleanAttribute(value as Boolean)
@@ -80,4 +83,20 @@ internal fun handleSet(value: Set<*>, kType: KType): AttributeValue {
             return setAttribute(set)
         }
     }
+}
+
+internal fun handleMap(map: Map<*, *>, kType: KType): AttributeValue {
+    val keyType = kType.arguments.first().type!!
+    val keyClazz = keyType.classifier as KClass<*>
+
+    if (keyClazz != String::class) {
+        throw UnsupportedKeyTypeException(keyClazz)
+    }
+
+    val valueType = kType.arguments.last().type!!
+
+    val value = map.mapKeys { it.key as String }
+        .mapValues { matchClassToAttribute(it.value!!, valueType) }
+
+    return mapAttribute(value)
 }
