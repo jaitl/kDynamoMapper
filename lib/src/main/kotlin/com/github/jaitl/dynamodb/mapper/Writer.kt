@@ -1,5 +1,6 @@
 package com.github.jaitl.dynamodb.mapper
 
+import com.github.jaitl.dynamodb.mapper.converter.NumberConverter
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import java.time.Instant
 import java.util.*
@@ -36,7 +37,7 @@ internal fun matchClassToAttribute(value: Any, kType: KType): AttributeValue {
         return mapAttribute(dWrite(value))
     }
     if (clazz.isSubclassOf(Number::class)) {
-        return numberAttribute(value as Number)
+        return NumberConverter.write(value, kType)
     }
     if (clazz.isSubclassOf(List::class)) {
         return handleList(value as List<*>, kType)

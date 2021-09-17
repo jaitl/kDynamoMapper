@@ -1,5 +1,6 @@
 package com.github.jaitl.dynamodb.mapper
 
+import com.github.jaitl.dynamodb.mapper.converter.NumberConverter
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import java.time.Instant
 import java.time.format.DateTimeFormatter
@@ -35,7 +36,7 @@ internal fun matchAttributeToClass(attr: AttributeValue, kType: KType): Any {
         return dRead(attr.m(), clazz)
     }
     if (clazz.isSubclassOf(Number::class)) {
-        return parseNumber(attr.n(), clazz)
+        return NumberConverter.read(attr, kType)
     }
     if (clazz.isSubclassOf(List::class)) {
         return matchList(attr, kType)
@@ -65,7 +66,7 @@ internal fun matchSet(attr: AttributeValue, kType: KType): Any {
     val clazz = setType.classifier as KClass<*>
 
     if (clazz.isSubclassOf(Number::class)) {
-        return attr.ns().map { parseNumber(it, clazz) }.toSet()
+        return attr.ns().map { NumberConverter.read(it, setType) }.toSet()
     }
 
     return when (clazz) {
@@ -86,16 +87,4 @@ internal fun matchMap(attr: AttributeValue, kType: KType): Any {
     val valueType = kType.arguments.last().type!!
 
     return attr.m().mapNotNull { it.key!! to matchAttributeToClass(it.value!!, valueType) }.toMap()
-}
-
-internal fun parseNumber(str: String, clazz: KClass<*>): Number {
-    return when (clazz) {
-        Byte::class -> str.toByte()
-        Short::class -> str.toShort()
-        Int::class -> str.toInt()
-        Long::class -> str.toLong()
-        Float::class -> str.toFloat()
-        Double::class -> str.toDouble()
-        else -> throw UnknownTypeException("Unknown type: $clazz")
-    }
 }
