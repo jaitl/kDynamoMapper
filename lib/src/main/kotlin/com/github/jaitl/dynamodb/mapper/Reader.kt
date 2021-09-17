@@ -12,7 +12,7 @@ import kotlin.reflect.full.primaryConstructor
 
 fun <T : Any> dRead(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
     if (!clazz.isData) {
-        throw NotDataClassTypeException(clazz)
+        throw NotDataClassTypeException("Type '${clazz}' isn't data class type")
     }
     val constructor = clazz.primaryConstructor!!
     val args = constructor.parameters
@@ -51,7 +51,7 @@ internal fun matchAttributeToClass(attr: AttributeValue, kType: KType): Any {
         Boolean::class -> attr.bool()
         UUID::class -> UUID.fromString(attr.s())
         Instant::class -> DateTimeFormatter.ISO_INSTANT.parse(attr.s(), Instant::from)
-        else -> throw UnknownTypeException(clazz)
+        else -> throw UnknownTypeException("Unknown type: $clazz")
     }
 }
 
@@ -79,7 +79,8 @@ internal fun matchMap(attr: AttributeValue, kType: KType): Any {
     val keyClazz = keyType.classifier as KClass<*>
 
     if (keyClazz != String::class) {
-        throw UnsupportedKeyTypeException(keyClazz)
+        throw UnsupportedKeyTypeException("Map doesn't support type '${keyClazz}' as key. " +
+                "Only 'String' type supported as map's key")
     }
 
     val valueType = kType.arguments.last().type!!
@@ -95,6 +96,6 @@ internal fun parseNumber(str: String, clazz: KClass<*>): Number {
         Long::class -> str.toLong()
         Float::class -> str.toFloat()
         Double::class -> str.toDouble()
-        else -> throw UnknownTypeException(clazz)
+        else -> throw UnknownTypeException("Unknown type: $clazz")
     }
 }

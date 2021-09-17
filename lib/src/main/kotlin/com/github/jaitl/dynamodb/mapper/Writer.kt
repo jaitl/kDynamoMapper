@@ -13,7 +13,7 @@ import kotlin.reflect.full.memberProperties
 fun dWrite(obj: Any): Map<String, AttributeValue> {
     val clazz = obj::class
     if (!clazz.isData) {
-        throw NotDataClassTypeException(clazz)
+        throw NotDataClassTypeException("Type '${clazz}' isn't data class type")
     }
     val members = clazz.memberProperties
     return members
@@ -52,7 +52,7 @@ internal fun matchClassToAttribute(value: Any, kType: KType): AttributeValue {
         Boolean::class -> booleanAttribute(value as Boolean)
         Instant::class -> instantAttribute(value as Instant)
         UUID::class -> uuidAttribute(value as UUID)
-        else -> throw UnknownTypeException(clazz)
+        else -> throw UnknownTypeException("Unknown type: $clazz")
     }
 }
 
@@ -90,7 +90,8 @@ internal fun handleMap(map: Map<*, *>, kType: KType): AttributeValue {
     val keyClazz = keyType.classifier as KClass<*>
 
     if (keyClazz != String::class) {
-        throw UnsupportedKeyTypeException(keyClazz)
+        throw UnsupportedKeyTypeException("Map doesn't support type '${keyClazz}' as key. " +
+                "Only 'String' type supported as map's key")
     }
 
     val valueType = kType.arguments.last().type!!
