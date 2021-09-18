@@ -1,17 +1,21 @@
 package com.github.jaitl.dynamodb.mapper
 
 import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class WriterTest {
+
+    val kDynamoMapper = KDynamoMapperImpl()
+
     @Test(expected = NotDataClassTypeException::class)
     fun testIsntDataType() {
         class SomeClass(val data: String)
 
         val simple = SomeClass("ddd")
-        dWrite(simple)
+        kDynamoMapper.write(simple)
     }
 
     @Test(expected = UnknownTypeException::class)
@@ -20,7 +24,7 @@ internal class WriterTest {
         data class SimpleData(val some: SomeClass)
 
         val simple = SimpleData(SomeClass())
-        dWrite(simple)
+        kDynamoMapper.write(simple)
     }
 
     @Test
@@ -28,7 +32,7 @@ internal class WriterTest {
         data class SimpleData(val str: String, val digit: Int?)
 
         val simple = SimpleData("ddd", null)
-        val map = dWrite(simple)
+        val map = kDynamoMapper.write(simple)
         val expectedMap = mapOf(
             "str" to stringAttribute("ddd")
         )
@@ -40,7 +44,7 @@ internal class WriterTest {
         data class SimpleData(val str: String, val digit: Int)
 
         val simple = SimpleData("ddd", 123)
-        val map = dWrite(simple)
+        val map = kDynamoMapper.write(simple)
         val expectedMap = mapOf(
             "str" to stringAttribute("ddd"),
             "digit" to numberAttribute(123)
@@ -54,7 +58,7 @@ internal class WriterTest {
         data class NestedData(val sometd: String, val data: SimpleData)
 
         val nested = NestedData("abc", SimpleData("ddd", 123))
-        val map = dWrite(nested)
+        val map = kDynamoMapper.write(nested)
 
         val simpleDataMap = mapOf(
             "str" to stringAttribute("ddd"),
@@ -73,12 +77,12 @@ internal class WriterTest {
 
         val data = TypeData(UUID.randomUUID(), true, Instant.now())
 
-        val map = dWrite(data)
+        val map = kDynamoMapper.write(data)
 
         val expectedMap = mapOf(
-            "id" to uuidAttribute(data.id),
+            "id" to stringAttribute(data.id.toString()),
             "bool" to booleanAttribute(data.bool),
-            "inst" to instantAttribute(data.inst)
+            "inst" to stringAttribute(DateTimeFormatter.ISO_INSTANT.format(data.inst))
         )
 
         assertEquals(expectedMap, map)
@@ -90,7 +94,7 @@ internal class WriterTest {
 
         val data = Data(listOf("1", "2", "3"))
 
-        val map = dWrite(data)
+        val map = kDynamoMapper.write(data)
 
         val list = listAttribute(
             stringAttribute("1"),
@@ -109,7 +113,7 @@ internal class WriterTest {
 
         val data = Data(listOf(SimpleData(1), SimpleData(2), SimpleData(3)))
 
-        val map = dWrite(data)
+        val map = kDynamoMapper.write(data)
 
         val list = listAttribute(
             mapAttribute(mapOf("vvv" to numberAttribute(1))),
@@ -127,7 +131,7 @@ internal class WriterTest {
 
         val data = Data(setOf("1", "2", "3"))
 
-        val map = dWrite(data)
+        val map = kDynamoMapper.write(data)
 
         val set = stringSetAttribute("1", "2", "3")
         val expectedMap = mapOf("set" to set)
@@ -141,7 +145,7 @@ internal class WriterTest {
 
         val data = Data(setOf(1, 2, 3))
 
-        val map = dWrite(data)
+        val map = kDynamoMapper.write(data)
 
         val set = numberSetAttribute("1", "2", "3")
         val expectedMap = mapOf("set" to set)
@@ -156,7 +160,7 @@ internal class WriterTest {
 
         val data = Data(setOf(SimpleData(1), SimpleData(2), SimpleData(3)))
 
-        val map = dWrite(data)
+        val map = kDynamoMapper.write(data)
 
         val set = setAttribute(
             mapAttribute(mapOf("vvv" to numberAttribute(1))),
@@ -173,7 +177,7 @@ internal class WriterTest {
         data class Data(val map: Map<Int, Int>)
         val data = Data(mapOf(1 to 1, 2 to 2))
 
-        dWrite(data)
+        kDynamoMapper.write(data)
     }
 
     @Test
@@ -183,7 +187,7 @@ internal class WriterTest {
 
         val data = Data(mapOf("a" to SimpleData(1), "b" to SimpleData(2), "c" to SimpleData(3)))
 
-        val map = dWrite(data)
+        val map = kDynamoMapper.write(data)
 
         val dataMap = mapAttribute(mapOf(
             "a" to mapAttribute(mapOf("num" to numberAttribute(1))),
@@ -201,7 +205,7 @@ internal class WriterTest {
 
         val data = Data(mapOf("a" to "a", "b" to "b", "c" to "c"))
 
-        val map = dWrite(data)
+        val map = kDynamoMapper.write(data)
 
         val dataMap = mapAttribute(mapOf(
             "a" to stringAttribute("a"),

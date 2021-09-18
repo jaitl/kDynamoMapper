@@ -1,16 +1,20 @@
 package com.github.jaitl.dynamodb.mapper
 
 import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class ReaderTest {
+
+    val kDynamoMapper = KDynamoMapperImpl()
+
     @Test(expected = NotDataClassTypeException::class)
     fun testIsntDataType() {
         class SomeClass(val data: String)
 
-        dRead(emptyMap(), SomeClass::class)
+        kDynamoMapper.read(emptyMap(), SomeClass::class)
     }
 
     @Test(expected = UnknownTypeException::class)
@@ -22,7 +26,7 @@ internal class ReaderTest {
             "some" to stringAttribute("ddd")
         )
 
-        dRead(obj, SimpleData::class)
+        kDynamoMapper.read(obj, SimpleData::class)
     }
 
     @Test
@@ -34,7 +38,7 @@ internal class ReaderTest {
             "str" to stringAttribute("ddd")
         )
 
-        val data = dRead(obj, SimpleData::class)
+        val data = kDynamoMapper.read(obj, SimpleData::class)
 
         assertEquals(expectedData, data)
     }
@@ -48,7 +52,7 @@ internal class ReaderTest {
             "digit" to numberAttribute(123)
         )
 
-        val data = dRead(obj, SimpleData::class)
+        val data = kDynamoMapper.read(obj, SimpleData::class)
         assertEquals(expectedData, data)
     }
 
@@ -67,7 +71,7 @@ internal class ReaderTest {
             "data" to mapAttribute(simpleDataMap)
         )
 
-        val nested = dRead(obj, NestedData::class)
+        val nested = kDynamoMapper.read(obj, NestedData::class)
 
         assertEquals(nestedExpected, nested)
     }
@@ -79,12 +83,12 @@ internal class ReaderTest {
         val dataExpected = TypeData(UUID.randomUUID(), true, Instant.now())
 
         val obj = mapOf(
-            "id" to uuidAttribute(dataExpected.id),
+            "id" to stringAttribute(dataExpected.id.toString()),
             "bool" to booleanAttribute(dataExpected.bool),
-            "inst" to instantAttribute(dataExpected.inst)
+            "inst" to stringAttribute(DateTimeFormatter.ISO_INSTANT.format(dataExpected.inst))
         )
 
-        val data = dRead(obj, TypeData::class)
+        val data = kDynamoMapper.read(obj, TypeData::class)
 
         assertEquals(dataExpected, data)
     }
@@ -102,7 +106,7 @@ internal class ReaderTest {
         )
         val obj = mapOf("list" to list)
 
-        val data = dRead(obj, Data::class)
+        val data = kDynamoMapper.read(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -121,7 +125,7 @@ internal class ReaderTest {
         )
         val obj = mapOf("list" to list)
 
-        val data = dRead(obj, Data::class)
+        val data = kDynamoMapper.read(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -135,7 +139,7 @@ internal class ReaderTest {
         val set = stringSetAttribute("1", "2", "3")
         val obj = mapOf("set" to set)
 
-        val data = dRead(obj, Data::class)
+        val data = kDynamoMapper.read(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -149,7 +153,7 @@ internal class ReaderTest {
         val set = numberSetAttribute("1", "2", "3")
         val obj = mapOf("set" to set)
 
-        val data = dRead(obj, Data::class)
+        val data = kDynamoMapper.read(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -168,7 +172,7 @@ internal class ReaderTest {
         )
         val obj = mapOf("set" to set)
 
-        val data = dRead(obj, Data::class)
+        val data = kDynamoMapper.read(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -180,7 +184,7 @@ internal class ReaderTest {
         val dataMap = mapAttribute(mapOf())
         val obj = mapOf("map" to dataMap)
 
-        dRead(obj, Data::class)
+        kDynamoMapper.read(obj, Data::class)
     }
 
     @Test
@@ -197,7 +201,7 @@ internal class ReaderTest {
         ))
         val obj = mapOf("map" to dataMap)
 
-        val data = dRead(obj, Data::class)
+        val data = kDynamoMapper.read(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -215,7 +219,7 @@ internal class ReaderTest {
         ))
         val obj = mapOf("map" to dataMap)
 
-        val data = dRead(obj, Data::class)
+        val data = kDynamoMapper.read(obj, Data::class)
 
         assertEquals(expectedData, data)
     }

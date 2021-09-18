@@ -1,13 +1,15 @@
-package com.github.jaitl.dynamodb.mapper.converter
+package com.github.jaitl.dynamodb.mapper.converter.type
 
+import com.github.jaitl.dynamodb.mapper.KDynamoMapper
 import com.github.jaitl.dynamodb.mapper.UnknownTypeException
+import com.github.jaitl.dynamodb.mapper.converter.TypeConverter
 import com.github.jaitl.dynamodb.mapper.numberAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
-object NumberConverter : TypeConverter<Number> {
-    override fun read(attr: AttributeValue, kType: KType): Number = read(attr.n(), kType)
+class NumberConverter : TypeConverter<Number> {
+    override fun read(mapper: KDynamoMapper, attr: AttributeValue, kType: KType): Number = read(attr.n(), kType)
 
     fun read(str: String, kType: KType): Number =
         when (kType.classifier) {
@@ -20,7 +22,7 @@ object NumberConverter : TypeConverter<Number> {
             else -> throw UnknownTypeException("Unknown type: ${kType.classifier}")
         }
 
-    override fun write(value: Any, kType: KType): AttributeValue = numberAttribute(value as Number)
+    override fun write(mapper: KDynamoMapper,value: Any, kType: KType): AttributeValue = numberAttribute(value as Number)
 
     override fun type(): KClass<Number> = Number::class
 }
