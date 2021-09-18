@@ -8,9 +8,10 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
 class BooleanConverter : TypeConverter<Boolean> {
-    override fun read(mapper: KDynamoMapper, attr: AttributeValue, kType: KType): Boolean = attr.bool()
+    override fun read(mapper: KDynamoMapper, attr: AttributeValue, kType: KType): Boolean =
+        attr.bool()
 
-    override fun write(mapper: KDynamoMapper,value: Any, kType: KType): AttributeValue =
+    override fun write(mapper: KDynamoMapper, value: Any, kType: KType): AttributeValue =
         booleanAttribute(value as Boolean)
 
     override fun type(): KClass<Boolean> = Boolean::class

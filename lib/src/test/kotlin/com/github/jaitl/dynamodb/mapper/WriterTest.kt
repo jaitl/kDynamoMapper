@@ -175,6 +175,7 @@ internal class WriterTest {
     @Test(expected = UnsupportedKeyTypeException::class)
     fun testMapUnsupportedKey() {
         data class Data(val map: Map<Int, Int>)
+
         val data = Data(mapOf(1 to 1, 2 to 2))
 
         kDynamoMapper.write(data)
@@ -189,11 +190,13 @@ internal class WriterTest {
 
         val map = kDynamoMapper.write(data)
 
-        val dataMap = mapAttribute(mapOf(
-            "a" to mapAttribute(mapOf("num" to numberAttribute(1))),
-            "b" to mapAttribute(mapOf("num" to numberAttribute(2))),
-            "c" to mapAttribute(mapOf("num" to numberAttribute(3)))
-        ))
+        val dataMap = mapAttribute(
+            mapOf(
+                "a" to mapAttribute(mapOf("num" to numberAttribute(1))),
+                "b" to mapAttribute(mapOf("num" to numberAttribute(2))),
+                "c" to mapAttribute(mapOf("num" to numberAttribute(3)))
+            )
+        )
         val expectedMap = mapOf("map" to dataMap)
 
         assertEquals(expectedMap, map)
@@ -207,11 +210,13 @@ internal class WriterTest {
 
         val map = kDynamoMapper.write(data)
 
-        val dataMap = mapAttribute(mapOf(
-            "a" to stringAttribute("a"),
-            "b" to stringAttribute("b"),
-            "c" to stringAttribute("c")
-        ))
+        val dataMap = mapAttribute(
+            mapOf(
+                "a" to stringAttribute("a"),
+                "b" to stringAttribute("b"),
+                "c" to stringAttribute("c")
+            )
+        )
         val expectedMap = mapOf("map" to dataMap)
 
         assertEquals(expectedMap, map)

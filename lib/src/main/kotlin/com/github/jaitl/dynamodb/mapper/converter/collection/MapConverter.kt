@@ -1,6 +1,7 @@
 package com.github.jaitl.dynamodb.mapper.converter.collection
 
-import com.github.jaitl.dynamodb.mapper.*
+import com.github.jaitl.dynamodb.mapper.KDynamoMapper
+import com.github.jaitl.dynamodb.mapper.UnsupportedKeyTypeException
 import com.github.jaitl.dynamodb.mapper.converter.TypeConverter
 import com.github.jaitl.dynamodb.mapper.mapAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
@@ -13,8 +14,10 @@ class MapConverter : TypeConverter<Map<*, *>> {
         val keyClazz = keyType.classifier as KClass<*>
 
         if (keyClazz != String::class) {
-            throw UnsupportedKeyTypeException("Map doesn't support type '${keyClazz}' as key. " +
-                    "Only 'String' type supported as key")
+            throw UnsupportedKeyTypeException(
+                "Map doesn't support type '${keyClazz}' as key. " +
+                        "Only 'String' type supported as key"
+            )
         }
 
         val valueType = kType.arguments.last().type!!
@@ -30,8 +33,10 @@ class MapConverter : TypeConverter<Map<*, *>> {
         val keyClazz = keyType.classifier as KClass<*>
 
         if (keyClazz != String::class) {
-            throw UnsupportedKeyTypeException("Map doesn't support type '${keyClazz}' as key. " +
-                    "Only 'String' type supported as key")
+            throw UnsupportedKeyTypeException(
+                "Map doesn't support type '${keyClazz}' as key. " +
+                        "Only 'String' type supported as key"
+            )
         }
 
         val valueType = kType.arguments.last().type!!

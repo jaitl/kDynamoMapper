@@ -15,7 +15,7 @@ class ListConverter : TypeConverter<List<*>> {
             .map { mapper.readValue(it, listType) }
     }
 
-    override fun write(mapper: KDynamoMapper,value: Any, kType: KType): AttributeValue {
+    override fun write(mapper: KDynamoMapper, value: Any, kType: KType): AttributeValue {
         val collection = value as List<*>
         val listType = kType.arguments.first().type!!
         val list = collection

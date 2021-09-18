@@ -8,7 +8,8 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
 
-class KDynamoMapperImpl(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDynamoMapper {
+class KDynamoMapperImpl(private val registry: ConverterRegistry = DEFAULT_REGISTRY) :
+    KDynamoMapper {
     override fun write(obj: Any): Map<String, AttributeValue> {
         val clazz = obj::class
         if (!clazz.isData) {

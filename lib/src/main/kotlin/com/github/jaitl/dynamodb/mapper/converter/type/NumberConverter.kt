@@ -9,7 +9,8 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
 class NumberConverter : TypeConverter<Number> {
-    override fun read(mapper: KDynamoMapper, attr: AttributeValue, kType: KType): Number = read(attr.n(), kType)
+    override fun read(mapper: KDynamoMapper, attr: AttributeValue, kType: KType): Number =
+        read(attr.n(), kType)
 
     fun read(str: String, kType: KType): Number =
         when (kType.classifier) {
@@ -22,7 +23,8 @@ class NumberConverter : TypeConverter<Number> {
             else -> throw UnknownTypeException("Unknown type: ${kType.classifier}")
         }
 
-    override fun write(mapper: KDynamoMapper,value: Any, kType: KType): AttributeValue = numberAttribute(value as Number)
+    override fun write(mapper: KDynamoMapper, value: Any, kType: KType): AttributeValue =
+        numberAttribute(value as Number)
 
     override fun type(): KClass<Number> = Number::class
 }

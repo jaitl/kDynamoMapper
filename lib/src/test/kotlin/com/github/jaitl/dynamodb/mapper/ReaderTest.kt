@@ -46,6 +46,7 @@ internal class ReaderTest {
     @Test
     fun testSimpleDataClass() {
         data class SimpleData(val str: String, val digit: Int)
+
         val expectedData = SimpleData("qwerty", 123)
         val obj = mapOf(
             "str" to stringAttribute("qwerty"),
@@ -192,13 +193,16 @@ internal class ReaderTest {
         data class SimpleData(val num: Int)
         data class Data(val map: Map<String, SimpleData>)
 
-        val expectedData = Data(mapOf("a" to SimpleData(1), "b" to SimpleData(2), "c" to SimpleData(3)))
+        val expectedData =
+            Data(mapOf("a" to SimpleData(1), "b" to SimpleData(2), "c" to SimpleData(3)))
 
-        val dataMap = mapAttribute(mapOf(
-            "a" to mapAttribute(mapOf("num" to numberAttribute(1))),
-            "b" to mapAttribute(mapOf("num" to numberAttribute(2))),
-            "c" to mapAttribute(mapOf("num" to numberAttribute(3)))
-        ))
+        val dataMap = mapAttribute(
+            mapOf(
+                "a" to mapAttribute(mapOf("num" to numberAttribute(1))),
+                "b" to mapAttribute(mapOf("num" to numberAttribute(2))),
+                "c" to mapAttribute(mapOf("num" to numberAttribute(3)))
+            )
+        )
         val obj = mapOf("map" to dataMap)
 
         val data = kDynamoMapper.read(obj, Data::class)
@@ -212,11 +216,13 @@ internal class ReaderTest {
 
         val expectedData = Data(mapOf("a" to "a", "b" to "b", "c" to "c"))
 
-        val dataMap = mapAttribute(mapOf(
-            "a" to stringAttribute("a"),
-            "b" to stringAttribute("b"),
-            "c" to stringAttribute("c")
-        ))
+        val dataMap = mapAttribute(
+            mapOf(
+                "a" to stringAttribute("a"),
+                "b" to stringAttribute("b"),
+                "c" to stringAttribute("c")
+            )
+        )
         val obj = mapOf("map" to dataMap)
 
         val data = kDynamoMapper.read(obj, Data::class)

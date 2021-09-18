@@ -1,6 +1,6 @@
 package com.github.jaitl.dynamodb.mapper.converter.collection
 
-import com.github.jaitl.dynamodb.mapper.*
+import com.github.jaitl.dynamodb.mapper.KDynamoMapper
 import com.github.jaitl.dynamodb.mapper.converter.TypeConverter
 import com.github.jaitl.dynamodb.mapper.converter.type.NumberConverter
 import com.github.jaitl.dynamodb.mapper.numberSetAttribute

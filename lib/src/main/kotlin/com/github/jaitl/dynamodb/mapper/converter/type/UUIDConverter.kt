@@ -9,9 +9,10 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
 class UUIDConverter : TypeConverter<UUID> {
-    override fun read(mapper: KDynamoMapper, attr: AttributeValue, kType: KType): UUID = UUID.fromString(attr.s())
+    override fun read(mapper: KDynamoMapper, attr: AttributeValue, kType: KType): UUID =
+        UUID.fromString(attr.s())
 
-    override fun write(mapper: KDynamoMapper,value: Any, kType: KType): AttributeValue =
+    override fun write(mapper: KDynamoMapper, value: Any, kType: KType): AttributeValue =
         stringAttribute((value as UUID).toString())
 
     override fun type(): KClass<UUID> = UUID::class
