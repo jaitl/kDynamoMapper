@@ -7,7 +7,7 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.memberProperties
 
 class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDynamoMapperWriter {
-    override fun write(obj: Any): Map<String, AttributeValue> {
+    override fun writeObject(obj: Any): Map<String, AttributeValue> {
         val clazz = obj::class
         if (!clazz.isData) {
             throw NotDataClassTypeException("Type '${clazz}' isn't data class type")
@@ -30,7 +30,7 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     override fun writeValue(value: Any, kType: KType): AttributeValue {
         val clazz = kType.classifier as KClass<*>
         if (clazz.isData) {
-            return mapAttribute(write(value))
+            return mapAttribute(writeObject(value))
         }
         val converter = registry.registry[clazz]
         if (converter != null) {

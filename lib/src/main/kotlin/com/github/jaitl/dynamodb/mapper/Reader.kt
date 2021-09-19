@@ -7,7 +7,7 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.primaryConstructor
 
 class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY): KDynamoMapperReader {
-    override fun <T : Any> read(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
+    override fun <T : Any> readObject(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
         if (!clazz.isData) {
             throw NotDataClassTypeException("Type '${clazz}' isn't data class type")
         }
@@ -29,7 +29,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY): KDynam
     override fun readValue(attr: AttributeValue, kType: KType): Any {
         val clazz = kType.classifier as KClass<*>
         if (clazz.isData) {
-            return read(attr.m(), clazz)
+            return readObject(attr.m(), clazz)
         }
         val converter = registry.registry[clazz]
         if (converter != null) {

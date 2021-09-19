@@ -14,7 +14,7 @@ internal class ReaderTest {
     fun testIsntDataType() {
         class SomeClass(val data: String)
 
-        reader.read(emptyMap(), SomeClass::class)
+        reader.readObject(emptyMap(), SomeClass::class)
     }
 
     @Test(expected = UnknownTypeException::class)
@@ -26,7 +26,7 @@ internal class ReaderTest {
             "some" to stringAttribute("ddd")
         )
 
-        reader.read(obj, SimpleData::class)
+        reader.readObject(obj, SimpleData::class)
     }
 
     @Test
@@ -38,7 +38,7 @@ internal class ReaderTest {
             "str" to stringAttribute("ddd")
         )
 
-        val data = reader.read(obj, SimpleData::class)
+        val data = reader.readObject(obj, SimpleData::class)
 
         assertEquals(expectedData, data)
     }
@@ -53,7 +53,7 @@ internal class ReaderTest {
             "digit" to numberAttribute(123)
         )
 
-        val data = reader.read(obj, SimpleData::class)
+        val data = reader.readObject(obj, SimpleData::class)
         assertEquals(expectedData, data)
     }
 
@@ -72,7 +72,7 @@ internal class ReaderTest {
             "data" to mapAttribute(simpleDataMap)
         )
 
-        val nested = reader.read(obj, NestedData::class)
+        val nested = reader.readObject(obj, NestedData::class)
 
         assertEquals(nestedExpected, nested)
     }
@@ -89,7 +89,7 @@ internal class ReaderTest {
             "inst" to stringAttribute(DateTimeFormatter.ISO_INSTANT.format(dataExpected.inst))
         )
 
-        val data = reader.read(obj, TypeData::class)
+        val data = reader.readObject(obj, TypeData::class)
 
         assertEquals(dataExpected, data)
     }
@@ -107,7 +107,7 @@ internal class ReaderTest {
         )
         val obj = mapOf("list" to list)
 
-        val data = reader.read(obj, Data::class)
+        val data = reader.readObject(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -126,7 +126,7 @@ internal class ReaderTest {
         )
         val obj = mapOf("list" to list)
 
-        val data = reader.read(obj, Data::class)
+        val data = reader.readObject(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -140,7 +140,7 @@ internal class ReaderTest {
         val set = stringSetAttribute("1", "2", "3")
         val obj = mapOf("set" to set)
 
-        val data = reader.read(obj, Data::class)
+        val data = reader.readObject(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -154,7 +154,7 @@ internal class ReaderTest {
         val set = numberSetAttribute("1", "2", "3")
         val obj = mapOf("set" to set)
 
-        val data = reader.read(obj, Data::class)
+        val data = reader.readObject(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -173,7 +173,7 @@ internal class ReaderTest {
         )
         val obj = mapOf("set" to set)
 
-        val data = reader.read(obj, Data::class)
+        val data = reader.readObject(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -185,7 +185,7 @@ internal class ReaderTest {
         val dataMap = mapAttribute(mapOf())
         val obj = mapOf("map" to dataMap)
 
-        reader.read(obj, Data::class)
+        reader.readObject(obj, Data::class)
     }
 
     @Test
@@ -205,7 +205,7 @@ internal class ReaderTest {
         )
         val obj = mapOf("map" to dataMap)
 
-        val data = reader.read(obj, Data::class)
+        val data = reader.readObject(obj, Data::class)
 
         assertEquals(expectedData, data)
     }
@@ -225,7 +225,7 @@ internal class ReaderTest {
         )
         val obj = mapOf("map" to dataMap)
 
-        val data = reader.read(obj, Data::class)
+        val data = reader.readObject(obj, Data::class)
 
         assertEquals(expectedData, data)
     }

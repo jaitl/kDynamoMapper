@@ -15,7 +15,7 @@ internal class WriterTest {
         class SomeClass(val data: String)
 
         val simple = SomeClass("ddd")
-        writer.write(simple)
+        writer.writeObject(simple)
     }
 
     @Test(expected = UnknownTypeException::class)
@@ -24,7 +24,7 @@ internal class WriterTest {
         data class SimpleData(val some: SomeClass)
 
         val simple = SimpleData(SomeClass())
-        writer.write(simple)
+        writer.writeObject(simple)
     }
 
     @Test
@@ -32,7 +32,7 @@ internal class WriterTest {
         data class SimpleData(val str: String, val digit: Int?)
 
         val simple = SimpleData("ddd", null)
-        val map = writer.write(simple)
+        val map = writer.writeObject(simple)
         val expectedMap = mapOf(
             "str" to stringAttribute("ddd")
         )
@@ -44,7 +44,7 @@ internal class WriterTest {
         data class SimpleData(val str: String, val digit: Int)
 
         val simple = SimpleData("ddd", 123)
-        val map = writer.write(simple)
+        val map = writer.writeObject(simple)
         val expectedMap = mapOf(
             "str" to stringAttribute("ddd"),
             "digit" to numberAttribute(123)
@@ -58,7 +58,7 @@ internal class WriterTest {
         data class NestedData(val sometd: String, val data: SimpleData)
 
         val nested = NestedData("abc", SimpleData("ddd", 123))
-        val map = writer.write(nested)
+        val map = writer.writeObject(nested)
 
         val simpleDataMap = mapOf(
             "str" to stringAttribute("ddd"),
@@ -77,7 +77,7 @@ internal class WriterTest {
 
         val data = TypeData(UUID.randomUUID(), true, Instant.now())
 
-        val map = writer.write(data)
+        val map = writer.writeObject(data)
 
         val expectedMap = mapOf(
             "id" to stringAttribute(data.id.toString()),
@@ -94,7 +94,7 @@ internal class WriterTest {
 
         val data = Data(listOf("1", "2", "3"))
 
-        val map = writer.write(data)
+        val map = writer.writeObject(data)
 
         val list = listAttribute(
             stringAttribute("1"),
@@ -113,7 +113,7 @@ internal class WriterTest {
 
         val data = Data(listOf(SimpleData(1), SimpleData(2), SimpleData(3)))
 
-        val map = writer.write(data)
+        val map = writer.writeObject(data)
 
         val list = listAttribute(
             mapAttribute(mapOf("vvv" to numberAttribute(1))),
@@ -131,7 +131,7 @@ internal class WriterTest {
 
         val data = Data(setOf("1", "2", "3"))
 
-        val map = writer.write(data)
+        val map = writer.writeObject(data)
 
         val set = stringSetAttribute("1", "2", "3")
         val expectedMap = mapOf("set" to set)
@@ -145,7 +145,7 @@ internal class WriterTest {
 
         val data = Data(setOf(1, 2, 3))
 
-        val map = writer.write(data)
+        val map = writer.writeObject(data)
 
         val set = numberSetAttribute("1", "2", "3")
         val expectedMap = mapOf("set" to set)
@@ -160,7 +160,7 @@ internal class WriterTest {
 
         val data = Data(setOf(SimpleData(1), SimpleData(2), SimpleData(3)))
 
-        val map = writer.write(data)
+        val map = writer.writeObject(data)
 
         val set = setAttribute(
             mapAttribute(mapOf("vvv" to numberAttribute(1))),
@@ -178,7 +178,7 @@ internal class WriterTest {
 
         val data = Data(mapOf(1 to 1, 2 to 2))
 
-        writer.write(data)
+        writer.writeObject(data)
     }
 
     @Test
@@ -188,7 +188,7 @@ internal class WriterTest {
 
         val data = Data(mapOf("a" to SimpleData(1), "b" to SimpleData(2), "c" to SimpleData(3)))
 
-        val map = writer.write(data)
+        val map = writer.writeObject(data)
 
         val dataMap = mapAttribute(
             mapOf(
@@ -208,7 +208,7 @@ internal class WriterTest {
 
         val data = Data(mapOf("a" to "a", "b" to "b", "c" to "c"))
 
-        val map = writer.write(data)
+        val map = writer.writeObject(data)
 
         val dataMap = mapAttribute(
             mapOf(
