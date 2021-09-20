@@ -4,23 +4,24 @@ import com.github.jaitl.dynamodb.base.DynamoDbTestSuite
 import com.github.jaitl.dynamodb.base.TableConfig
 import com.github.jaitl.dynamodb.base.helpCreateTable
 import com.github.jaitl.dynamodb.mapper.Mapper
-import com.github.jaitl.dynamodb.mapper.stringAttribute
-import org.junit.Test
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
 import java.time.Instant
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
 internal class GetAndPutObjectTest : DynamoDbTestSuite() {
     private val table = TableConfig("table", "id")
 
+    private val mapper = Mapper()
+
     @Test
     fun test() {
-        val mapper = Mapper()
         dynamoDbClient.helpCreateTable(table)
 
         data class MyData(val id: String, val dataInt: Int, val dataInstant: Instant)
+        data class MyKey(val id: String)
 
         val expectedData = MyData("1", 1234, Instant.now())
 
@@ -33,17 +34,17 @@ internal class GetAndPutObjectTest : DynamoDbTestSuite() {
 
         dynamoDbClient.putItem(putRequest)
 
-        val keyMap = mapOf("id" to stringAttribute(expectedData.id))
+        val keyValue = mapper.writeObject(MyKey(expectedData.id))
 
         val getRequest = GetItemRequest.builder()
-            .key(keyMap)
+            .key(keyValue)
             .tableName(table.tableName)
             .build();
 
         val result = dynamoDbClient.getItem(getRequest)
 
-        val returnedData = mapper.readObject(result.item(), MyData::class)
+        val actualData = mapper.readObject(result.item(), MyData::class)
 
-        assertEquals(expectedData, returnedData)
+        assertEquals(expectedData, actualData)
     }
 }
