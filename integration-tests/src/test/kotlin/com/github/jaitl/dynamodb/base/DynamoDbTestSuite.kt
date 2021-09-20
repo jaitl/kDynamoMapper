@@ -1,4 +1,4 @@
-package com.github.jaitl.dynamodb
+package com.github.jaitl.dynamodb.base
 
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
@@ -7,10 +7,9 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import java.net.URI
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
-import kotlin.test.Test
 
 
-open class DynamoDbTestSuite {
+internal abstract class DynamoDbTestSuite {
     private val containerName = DockerImageName.parse("amazon/dynamodb-local:1.16.0")
     private val dynamoDbContainer = GenericContainer<Nothing>(containerName)
         .apply { withExposedPorts(8000) }
@@ -30,10 +29,5 @@ open class DynamoDbTestSuite {
     @AfterTest
     fun stop() {
         dynamoDbContainer.stop()
-    }
-
-    @Test
-    fun test() {
-        dynamoDbClient.createTable(TableConfig("test", "id"))
     }
 }
