@@ -2,7 +2,6 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
     kotlin("jvm") version "1.5.30"
-    jacoco
 }
 
 repositories {
@@ -11,19 +10,6 @@ repositories {
 
 subprojects {
     apply(plugin = "kotlin")
-    apply(plugin = "jacoco")
-
-    tasks {
-        withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = "11"
-            }
-        }
-    }
-
-    tasks.compileJava {
-        options.release.set(11)
-    }
 
     repositories {
         mavenCentral()
@@ -37,22 +23,16 @@ subprojects {
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     }
 
-    jacoco {
-        toolVersion = "0.8.7"
-    }
-
-    tasks.test {
-        finalizedBy(tasks.jacocoTestReport)
-    }
-
-    tasks.jacocoTestReport {
-        dependsOn(tasks.test)
-        reports {
-            xml.required.set(true)
-        }
-    }
-
     tasks {
+        withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
+        }
+        withType<JavaCompile> {
+            sourceCompatibility = "11"
+            targetCompatibility = "11"
+        }
         test {
             testLogging {
                 events("failed")
