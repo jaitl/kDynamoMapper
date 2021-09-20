@@ -2,11 +2,10 @@ package com.github.jaitl.dynamodb.base
 
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.*
-import kotlin.test.assertEquals
 
 internal data class TableConfig(val tableName: String, val keyName: String)
 
-internal fun DynamoDbClient.helpCreateTable(tableConfig: TableConfig) {
+internal fun DynamoDbClient.helpCreateTable(tableConfig: TableConfig) = logException {
     val request: CreateTableRequest = CreateTableRequest.builder()
         .attributeDefinitions(
             AttributeDefinition.builder()
@@ -30,12 +29,4 @@ internal fun DynamoDbClient.helpCreateTable(tableConfig: TableConfig) {
         .build()
 
     createTable(request)
-
-    val tableRequest = DescribeTableRequest.builder()
-        .tableName(tableConfig.tableName)
-        .build()
-    val waiterResponse = waiter().waitUntilTableExists(tableRequest)
-    val tableDescription = waiterResponse.matched().response().orElseThrow()
-
-    assertEquals(tableRequest.tableName(), tableDescription.table().tableName())
 }
