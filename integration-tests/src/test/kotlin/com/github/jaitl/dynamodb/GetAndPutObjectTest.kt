@@ -12,7 +12,7 @@ import java.time.Instant
 import kotlin.test.assertEquals
 
 
-internal class CreateItemTest : DynamoDbTestSuite() {
+internal class GetAndPutObjectTest : DynamoDbTestSuite() {
     private val table = TableConfig("table", "id")
 
     @Test

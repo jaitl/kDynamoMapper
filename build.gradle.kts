@@ -5,6 +5,10 @@ plugins {
     jacoco
 }
 
+repositories {
+    mavenCentral()
+}
+
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "jacoco")
