@@ -9,3 +9,4 @@
 
 rootProject.name = "kDynamoMapper"
 include("lib")
+include("integration-tests")
