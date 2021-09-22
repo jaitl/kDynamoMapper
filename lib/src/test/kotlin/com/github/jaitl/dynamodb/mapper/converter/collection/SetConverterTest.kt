@@ -1,11 +1,40 @@
 package com.github.jaitl.dynamodb.mapper.converter.collection
 
 import com.github.jaitl.dynamodb.mapper.*
+import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class SetConverterTest {
     val mapper = Mapper()
+
+    @Test
+    fun testWriteEmptySet() {
+        data class Data(val set: Set<Instant>)
+
+        val data = Data(emptySet())
+
+        val map = mapper.writeObject(data)
+
+        val set = setAttribute(emptyList())
+        val expectedMap = mapOf("set" to set)
+
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
+    fun testReadEmptySet() {
+        data class Data(val set: Set<Instant>)
+
+        val expectedData = Data(emptySet())
+
+        val set = setAttribute(emptyList())
+        val obj = mapOf("set" to set)
+
+        val data = mapper.readObject(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
 
     @Test
     fun testWriteStringSet() {

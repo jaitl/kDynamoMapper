@@ -27,6 +27,34 @@ internal class MapConverterTest {
     }
 
     @Test
+    fun testWriteEmptyMap() {
+        data class Data(val map: Map<String, String>)
+
+        val data = Data(emptyMap())
+
+        val map = mapper.writeObject(data)
+
+        val dataMap = mapAttribute(emptyMap())
+        val expectedMap = mapOf("map" to dataMap)
+
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
+    fun testReadEmptyMap() {
+        data class Data(val map: Map<String, String>)
+
+        val expectedData = Data(emptyMap())
+
+        val dataMap = mapAttribute(emptyMap())
+        val obj = mapOf("map" to dataMap)
+
+        val data = mapper.readObject(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
+
+    @Test
     fun testWriteObjectMap() {
         data class SimpleData(val num: Int)
         data class Data(val map: Map<String, SimpleData>)

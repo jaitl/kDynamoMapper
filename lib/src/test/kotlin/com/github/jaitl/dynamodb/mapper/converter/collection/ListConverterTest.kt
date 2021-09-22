@@ -9,6 +9,34 @@ internal class ListConverterTest {
     val mapper = Mapper()
 
     @Test
+    fun testWriteEmptyList() {
+        data class Data(val list: List<String>)
+
+        val data = Data(emptyList())
+
+        val map = mapper.writeObject(data)
+
+        val list = listAttribute()
+        val expectedMap = mapOf("list" to list)
+
+        assertEquals(expectedMap, map)
+    }
+
+    @Test
+    fun testReadEmptyList() {
+        data class Data(val list: List<String>)
+
+        val expectedData = Data(emptyList())
+
+        val list = listAttribute()
+        val obj = mapOf("list" to list)
+
+        val data = mapper.readObject(obj, Data::class)
+
+        assertEquals(expectedData, data)
+    }
+
+    @Test
     fun testWriteStringList() {
         data class Data(val list: List<String>)
 
