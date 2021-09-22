@@ -1,10 +1,8 @@
 package com.github.jaitl.dynamodb
 
 import com.github.jaitl.dynamodb.base.*
-import com.github.jaitl.dynamodb.base.DynamoDbTestSuite
-import com.github.jaitl.dynamodb.base.TableConfig
-import com.github.jaitl.dynamodb.base.helpCreateTable
 import com.github.jaitl.dynamodb.mapper.Mapper
+import com.github.jaitl.dynamodb.mapper.mapAttribute
 import com.github.jaitl.dynamodb.mapper.numberAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeAction
 import software.amazon.awssdk.services.dynamodb.model.AttributeValueUpdate
@@ -13,7 +11,7 @@ import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class EditObjectTest: DynamoDbTestSuite() {
+internal class EditObjectTest : DynamoDbTestSuite() {
     private val table = TableConfig("table", "id")
 
     private val mapper = Mapper()
@@ -61,6 +59,28 @@ internal class EditObjectTest: DynamoDbTestSuite() {
 
         val data = MyData("1", NestedObject(1234, Instant.now()))
 
-        val result = dynamoDbClient.helpPutItem(data, table.tableName)
+        dynamoDbClient.helpPutItem(data, table.tableName)
+
+        val itemKey = mapper.writeObject(MyKey("1"))
+        val newNested = NestedObject(4321, data.nested.dataInstant.plusSeconds(1000))
+
+        val updatedValues = mapOf(
+            "nested" to AttributeValueUpdate.builder()
+                .value(mapAttribute(mapper.writeObject(newNested)))
+                .action(AttributeAction.PUT)
+                .build()
+        )
+
+        val updateRequest = UpdateItemRequest.builder()
+            .tableName(table.tableName)
+            .key(itemKey)
+            .attributeUpdates(updatedValues)
+            .build();
+
+        dynamoDbClient.updateItem(updateRequest)
+
+        val updatedItem = dynamoDbClient.helpGetItem(MyKey("1"), table.tableName, MyData::class)
+
+        assertEquals(MyData("1", nested = newNested), updatedItem)
     }
 }
