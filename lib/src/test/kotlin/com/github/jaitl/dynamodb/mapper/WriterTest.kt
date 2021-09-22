@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 
 internal class WriterTest {
 
-    val writer: KDynamoMapperWriter = Writer()
+    private val writer: KDynamoMapperWriter = Writer()
 
     @Test(expected = NotDataClassTypeException::class)
     fun testIsntDataType() {
@@ -84,140 +84,6 @@ internal class WriterTest {
             "bool" to booleanAttribute(data.bool),
             "inst" to stringAttribute(DateTimeFormatter.ISO_INSTANT.format(data.inst))
         )
-
-        assertEquals(expectedMap, map)
-    }
-
-    @Test
-    fun testStringList() {
-        data class Data(val list: List<String>)
-
-        val data = Data(listOf("1", "2", "3"))
-
-        val map = writer.writeObject(data)
-
-        val list = listAttribute(
-            stringAttribute("1"),
-            stringAttribute("2"),
-            stringAttribute("3"),
-        )
-        val expectedMap = mapOf("list" to list)
-
-        assertEquals(expectedMap, map)
-    }
-
-    @Test
-    fun testDataClassList() {
-        data class SimpleData(val vvv: Int)
-        data class Data(val list: List<SimpleData>)
-
-        val data = Data(listOf(SimpleData(1), SimpleData(2), SimpleData(3)))
-
-        val map = writer.writeObject(data)
-
-        val list = listAttribute(
-            mapAttribute(mapOf("vvv" to numberAttribute(1))),
-            mapAttribute(mapOf("vvv" to numberAttribute(2))),
-            mapAttribute(mapOf("vvv" to numberAttribute(3))),
-        )
-        val expectedMap = mapOf("list" to list)
-
-        assertEquals(expectedMap, map)
-    }
-
-    @Test
-    fun testStringSet() {
-        data class Data(val set: Set<String>)
-
-        val data = Data(setOf("1", "2", "3"))
-
-        val map = writer.writeObject(data)
-
-        val set = stringSetAttribute("1", "2", "3")
-        val expectedMap = mapOf("set" to set)
-
-        assertEquals(expectedMap, map)
-    }
-
-    @Test
-    fun testNumberSet() {
-        data class Data(val set: Set<Int>)
-
-        val data = Data(setOf(1, 2, 3))
-
-        val map = writer.writeObject(data)
-
-        val set = numberSetAttribute("1", "2", "3")
-        val expectedMap = mapOf("set" to set)
-
-        assertEquals(expectedMap, map)
-    }
-
-    @Test
-    fun testObjectSet() {
-        data class SimpleData(val vvv: Int)
-        data class Data(val set: Set<SimpleData>)
-
-        val data = Data(setOf(SimpleData(1), SimpleData(2), SimpleData(3)))
-
-        val map = writer.writeObject(data)
-
-        val set = setAttribute(
-            mapAttribute(mapOf("vvv" to numberAttribute(1))),
-            mapAttribute(mapOf("vvv" to numberAttribute(2))),
-            mapAttribute(mapOf("vvv" to numberAttribute(3))),
-        )
-        val expectedMap = mapOf("set" to set)
-
-        assertEquals(expectedMap, map)
-    }
-
-    @Test(expected = UnsupportedKeyTypeException::class)
-    fun testMapUnsupportedKey() {
-        data class Data(val map: Map<Int, Int>)
-
-        val data = Data(mapOf(1 to 1, 2 to 2))
-
-        writer.writeObject(data)
-    }
-
-    @Test
-    fun testObjectMap() {
-        data class SimpleData(val num: Int)
-        data class Data(val map: Map<String, SimpleData>)
-
-        val data = Data(mapOf("a" to SimpleData(1), "b" to SimpleData(2), "c" to SimpleData(3)))
-
-        val map = writer.writeObject(data)
-
-        val dataMap = mapAttribute(
-            mapOf(
-                "a" to mapAttribute(mapOf("num" to numberAttribute(1))),
-                "b" to mapAttribute(mapOf("num" to numberAttribute(2))),
-                "c" to mapAttribute(mapOf("num" to numberAttribute(3)))
-            )
-        )
-        val expectedMap = mapOf("map" to dataMap)
-
-        assertEquals(expectedMap, map)
-    }
-
-    @Test
-    fun testStringMap() {
-        data class Data(val map: Map<String, String>)
-
-        val data = Data(mapOf("a" to "a", "b" to "b", "c" to "c"))
-
-        val map = writer.writeObject(data)
-
-        val dataMap = mapAttribute(
-            mapOf(
-                "a" to stringAttribute("a"),
-                "b" to stringAttribute("b"),
-                "c" to stringAttribute("c")
-            )
-        )
-        val expectedMap = mapOf("map" to dataMap)
 
         assertEquals(expectedMap, map)
     }
