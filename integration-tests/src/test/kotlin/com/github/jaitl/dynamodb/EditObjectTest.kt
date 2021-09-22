@@ -83,4 +83,36 @@ internal class EditObjectTest : DynamoDbTestSuite() {
 
         assertEquals(MyData("1", nested = newNested), updatedItem)
     }
+
+    @Test
+    fun testUpdateDto() {
+        dynamoDbClient.helpCreateTable(table)
+
+        val dataOne = MyClassOne("1", DtoOne(1234, "one one"))
+
+        dynamoDbClient.helpPutItem(dataOne, table.tableName)
+
+        val itemKey = mapper.writeObject(MyKey("1"))
+        // TODO fix when real dto will be supported
+        val dataTwo = MyClassTwo("1", DtoTwo(4321L, Instant.now(), 4444.0))
+
+        val updatedValues = mapOf(
+            "dto" to AttributeValueUpdate.builder()
+                .value(mapAttribute(mapper.writeObject(dataTwo.dto)))
+                .action(AttributeAction.PUT)
+                .build()
+        )
+
+        val updateRequest = UpdateItemRequest.builder()
+            .tableName(table.tableName)
+            .key(itemKey)
+            .attributeUpdates(updatedValues)
+            .build();
+
+        dynamoDbClient.updateItem(updateRequest)
+
+        val updatedItem = dynamoDbClient.helpGetItem(MyKey("1"), table.tableName, MyClassTwo::class)
+
+        assertEquals(dataTwo, updatedItem)
+    }
 }

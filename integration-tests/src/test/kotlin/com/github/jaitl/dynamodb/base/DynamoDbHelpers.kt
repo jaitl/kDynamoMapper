@@ -73,6 +73,7 @@ fun <T : Any> DynamoDbClient.helpGetItem(key: Any, table: String, clazz: KClass<
         .build();
 
     val result = getItem(getRequest)
+    println(result)
 
     return mapper.readObject(result.item(), clazz)
 }
