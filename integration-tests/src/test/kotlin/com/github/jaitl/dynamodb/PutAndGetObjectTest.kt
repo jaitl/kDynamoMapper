@@ -11,7 +11,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-internal class GetAndPutObjectTest : DynamoDbTestSuite() {
+internal class PutAndGetObjectTest : DynamoDbTestSuite() {
     private val table = TableConfig("table", "id")
 
     private val mapper = Mapper()
