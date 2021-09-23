@@ -40,7 +40,7 @@ internal class EditObjectTest : DynamoDbTestSuite() {
             .tableName(table.tableName)
             .key(itemKey)
             .attributeUpdates(updatedValues)
-            .build();
+            .build()
 
         dynamoDbClient.updateItem(updateRequest)
 
@@ -75,7 +75,7 @@ internal class EditObjectTest : DynamoDbTestSuite() {
             .tableName(table.tableName)
             .key(itemKey)
             .attributeUpdates(updatedValues)
-            .build();
+            .build()
 
         dynamoDbClient.updateItem(updateRequest)
 
@@ -88,17 +88,16 @@ internal class EditObjectTest : DynamoDbTestSuite() {
     fun testUpdateDto() {
         dynamoDbClient.helpCreateTable(table)
 
-        val dataOne = MyClassOne("1", DtoOne(1234, "one one"))
+        val data = MyClass("1", DtoOne(1234, "one one"))
 
-        dynamoDbClient.helpPutItem(dataOne, table.tableName)
+        dynamoDbClient.helpPutItem(data, table.tableName)
 
         val itemKey = mapper.writeObject(MyKey("1"))
-        // TODO fix when real dto will be supported
-        val dataTwo = MyClassTwo("1", DtoTwo(4321L, Instant.now(), 4444.0))
+        val updatedDto = DtoTwo(4321L, Instant.now(), 4444.0)
 
         val updatedValues = mapOf(
             "dto" to updateAttribute(
-                attribute = mapAttribute(mapper.writeObject(dataTwo.dto)),
+                attribute = mapAttribute(mapper.writeObject(updatedDto)),
                 action = AttributeAction.PUT
             )
         )
@@ -107,12 +106,14 @@ internal class EditObjectTest : DynamoDbTestSuite() {
             .tableName(table.tableName)
             .key(itemKey)
             .attributeUpdates(updatedValues)
-            .build();
+            .build()
 
         dynamoDbClient.updateItem(updateRequest)
 
-        val updatedItem = dynamoDbClient.helpGetItem(MyKey("1"), table.tableName, MyClassTwo::class)
+        val updatedItem = dynamoDbClient.helpGetItem(MyKey("1"), table.tableName, MyClass::class)
 
-        assertEquals(dataTwo, updatedItem)
+        val expectedItem = data.copy(dto = updatedDto)
+
+        assertEquals(expectedItem, updatedItem)
     }
 }
