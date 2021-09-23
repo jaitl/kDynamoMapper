@@ -10,3 +10,5 @@ class NotDataClassTypeException(message: String) : KDynamoMapperException(messag
 class UnknownTypeException(message: String) : KDynamoMapperException(message)
 
 class RequiredFieldNotFoundException(message: String, val fields: Set<String>) : KDynamoMapperException(message)
+
+class AttributeNotFoundException(message: String) : KDynamoMapperException(message)

@@ -1,5 +1,6 @@
 package com.github.jaitl.dynamodb.mapper
 
+import com.github.jaitl.dynamodb.mapper.converter.DtoConverter
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -33,6 +34,9 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
         val clazz = kType.classifier as KClass<*>
         if (clazz.isData) {
             return readObject(attr.m(), clazz)
+        }
+        if (clazz.isSealed) {
+            return DtoConverter.read(this, attr, kType)
         }
         val converter = registry.registry[clazz]
         if (converter != null) {

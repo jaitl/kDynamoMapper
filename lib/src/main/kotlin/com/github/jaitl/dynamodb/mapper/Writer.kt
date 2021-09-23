@@ -1,5 +1,6 @@
 package com.github.jaitl.dynamodb.mapper
 
+import com.github.jaitl.dynamodb.mapper.converter.DtoConverter
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
@@ -31,6 +32,9 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
         val clazz = kType.classifier as KClass<*>
         if (clazz.isData) {
             return mapAttribute(writeObject(value))
+        }
+        if (clazz.isSealed) {
+            return DtoConverter.write(this, value, kType)
         }
         val converter = registry.registry[clazz]
         if (converter != null) {
