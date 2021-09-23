@@ -1,15 +1,10 @@
-package com.github.jaitl.dynamodb.mapper.converter
+package com.github.jaitl.dynamodb.mapper
 
-import com.github.jaitl.dynamodb.mapper.AttributeNotFoundException
-import com.github.jaitl.dynamodb.mapper.Mapper
-import com.github.jaitl.dynamodb.mapper.helper.DtoOne
-import com.github.jaitl.dynamodb.mapper.helper.SimpleDataDto
-import com.github.jaitl.dynamodb.mapper.mapAttribute
-import com.github.jaitl.dynamodb.mapper.stringAttribute
+import com.github.jaitl.dynamodb.mapper.helper.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class DtoConverterTest {
+internal class DtoTest {
 
     val mapper = Mapper()
 
@@ -45,6 +40,44 @@ internal class DtoConverterTest {
         val expectedData = SimpleDataDto(DtoOne("test"))
 
         assertEquals(expectedData, data)
+    }
+
+    @Test
+    fun testReadDtoBySealedClass() {
+        val dtoMap = mapOf(
+            "long" to numberAttribute(1234),
+            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.DtoTwo")
+        )
+
+        val data = mapper.readObject(dtoMap, SimpleDto::class)
+
+        val expectedData = DtoTwo(1234)
+
+        assertEquals(expectedData, data)
+    }
+
+    @Test
+    fun testReadDtoBySealedClassInherited() {
+        val dtoMap = mapOf(
+            "double" to numberAttribute(1234.654),
+            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.DtoSecondOne")
+        )
+
+        val data = mapper.readObject(dtoMap, SimpleDto::class)
+
+        val expectedData = DtoSecondOne(1234.654)
+
+        assertEquals(expectedData, data)
+    }
+
+    @Test(expected = UnknownTypeException::class)
+    fun testReadDtoBySealedClassWrongClass() {
+        val dtoMap = mapOf(
+            "long" to numberAttribute(1234),
+            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.SimpleDataDto")
+        )
+
+        mapper.readObject(dtoMap, SimpleDto::class)
     }
 
     @Test(expected = ClassNotFoundException::class)
