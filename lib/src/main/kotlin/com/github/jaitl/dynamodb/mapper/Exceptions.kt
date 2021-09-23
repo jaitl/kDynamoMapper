@@ -8,3 +8,5 @@ class UnsupportedKeyTypeException(message: String) : KDynamoMapperException(mess
 class NotDataClassTypeException(message: String) : KDynamoMapperException(message)
 
 class UnknownTypeException(message: String) : KDynamoMapperException(message)
+
+class RequiredFieldNotFoundException(message: String, val fields: Set<String>) : KDynamoMapperException(message)

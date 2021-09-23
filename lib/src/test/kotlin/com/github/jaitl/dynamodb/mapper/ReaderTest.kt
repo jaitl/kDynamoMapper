@@ -1,10 +1,12 @@
 package com.github.jaitl.dynamodb.mapper
 
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 internal class ReaderTest {
 
@@ -27,6 +29,32 @@ internal class ReaderTest {
         )
 
         reader.readObject(obj, SimpleData::class)
+    }
+
+    @Test
+    fun testNotFoundField() {
+        data class SimpleData(val string: String)
+
+        val obj = mapOf<String, AttributeValue>()
+
+        val exception = assertFailsWith(RequiredFieldNotFoundException::class) {
+            reader.readObject(obj, SimpleData::class)
+        }
+
+        assertEquals(setOf("string"), exception.fields)
+    }
+
+    @Test
+    fun testNotFoundOneField() {
+        data class SimpleData(val string: String, val int: Int, val long: Long?)
+
+        val obj = mapOf("string" to stringAttribute("value"))
+
+        val exception = assertFailsWith(RequiredFieldNotFoundException::class) {
+            reader.readObject(obj, SimpleData::class)
+        }
+
+        assertEquals(setOf("int"), exception.fields)
     }
 
     @Test

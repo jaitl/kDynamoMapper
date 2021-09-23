@@ -1,7 +1,9 @@
 package com.github.jaitl.dynamodb.mapper.converter.type
 
 import com.github.jaitl.dynamodb.mapper.Mapper
+import com.github.jaitl.dynamodb.mapper.UnknownTypeException
 import com.github.jaitl.dynamodb.mapper.numberAttribute
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -51,5 +53,13 @@ internal class NumberConverterTest {
         val data = mapper.readObject(attrMap, NumberData::class)
 
         assertEquals(expectedData, data)
+    }
+
+    @Test(expected = UnknownTypeException::class)
+    fun testReadUnsupportedType() {
+        val data = mapOf("number" to numberAttribute(1))
+        data class MyData(val number: MyTestNumber)
+
+        mapper.readObject(data, MyData::class)
     }
 }

@@ -6,7 +6,7 @@ import kotlin.reflect.KParameter
 import kotlin.reflect.KType
 import kotlin.reflect.full.primaryConstructor
 
-class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY): KDynamoMapperReader {
+class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDynamoMapperReader {
     override fun <T : Any> readObject(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
         if (!clazz.isData) {
             throw NotDataClassTypeException("Type '${clazz}' isn't data class type")
@@ -14,7 +14,10 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY): KDynam
         val constructor = clazz.primaryConstructor!!
         val args = constructor.parameters
 
+        checkRequiredFields(obj, args, clazz)
+
         val params = args.associateWith { readParameter(it, obj) }
+
         return constructor.callBy(params)
     }
 
@@ -40,5 +43,22 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY): KDynam
             return superClasses.first().read(this, attr, kType)
         }
         throw UnknownTypeException("Unknown type: $clazz")
+    }
+
+    private fun checkRequiredFields(obj: Map<String, AttributeValue>, args: List<KParameter>, clazz: KClass<*>) {
+        val foundFields = obj.keys
+        val requiredFields = args.filterNot { it.type.isMarkedNullable }.mapNotNull { it.name }.toSet()
+
+        val notFoundFields = requiredFields - foundFields
+
+        if (notFoundFields.isNotEmpty()) {
+            throw RequiredFieldNotFoundException(
+                "Required fields not found: [${
+                    notFoundFields.joinToString(
+                        ", ", "'", "'"
+                    )
+                }] for $clazz", notFoundFields
+            )
+        }
     }
 }
