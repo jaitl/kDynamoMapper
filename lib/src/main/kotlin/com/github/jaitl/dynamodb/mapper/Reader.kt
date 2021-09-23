@@ -34,6 +34,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
             )
         }
 
+        @Suppress("UNCHECKED_CAST")
         val dtoClazz = Class.forName(realClazz).kotlin as KClass<T>
 
         if (!kClass.isSuperclassOf(dtoClazz)) {
