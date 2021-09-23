@@ -1,11 +1,11 @@
 package com.github.jaitl.dynamodb.mapper.helper
 
-sealed class SimpleDto
+sealed interface SimpleDto
 
-data class DtoOne(val string: String) : SimpleDto()
-data class DtoTwo(val long: Long) : SimpleDto()
+data class DtoOne(val string: String) : SimpleDto
+data class DtoTwo(val long: Long) : SimpleDto
 
-sealed class SecondSimpleDto : SimpleDto()
+sealed class SecondSimpleDto : SimpleDto
 data class DtoSecondOne(val double: Double) : SecondSimpleDto()
 
 
