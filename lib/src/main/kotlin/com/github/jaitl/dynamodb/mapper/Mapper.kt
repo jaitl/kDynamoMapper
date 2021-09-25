@@ -10,7 +10,7 @@ import kotlin.reflect.KType
  * Reads a DynamoDb attribute map to a case class.
  * Writes a case class to a DynamoDb attribute map.
  *
- * @param registry list of converters for collections and external types.
+ * @param registry converters for collections and external types.
  */
 class Mapper(registry: ConverterRegistry = DEFAULT_REGISTRY) :
     KDynamoMapper {

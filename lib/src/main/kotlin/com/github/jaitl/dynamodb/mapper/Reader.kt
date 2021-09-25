@@ -10,7 +10,7 @@ import kotlin.reflect.full.primaryConstructor
 /**
  * Reads a DynamoDb attribute map to a case class.
  *
- * @param registry list of converters for collections and external types.
+ * @param registry converters for collections and external types.
  */
 class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDynamoMapperReader {
     /**

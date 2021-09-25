@@ -9,7 +9,7 @@ import kotlin.reflect.full.memberProperties
 /**
  * Writes a case class to a DynamoDb attribute map.
  *
- * @param registry list of converters for collections and external types.
+ * @param registry converters for collections and external types.
  */
 class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDynamoMapperWriter {
     /**
