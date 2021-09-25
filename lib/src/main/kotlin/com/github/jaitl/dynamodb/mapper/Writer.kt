@@ -36,7 +36,7 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
 
     /**
      * DTO determines by inheritance from a sealed interface/class. Each DTO has to contain
-     * the DTO_FIELD_NAME field with an original class name.
+     * the DTO_FIELD_NAME field with the original class name.
      */
     private fun dtoClassInfo(clazz: KClass<*>): Map<String, AttributeValue> {
         val hasSealedParent = clazz.supertypes
