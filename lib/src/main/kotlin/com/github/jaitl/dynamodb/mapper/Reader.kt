@@ -7,13 +7,27 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.isSuperclassOf
 import kotlin.reflect.full.primaryConstructor
 
+/**
+ * Reads an object map from DynamoDb to a case class.
+ *
+ * @param registry list of converters for collections and external types.
+ */
 class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDynamoMapperReader {
+    /**
+     * Reads Map<String, AttributeValue> to a case class.
+     *
+     * @param obj an instance of Map<String, AttributeValue>.
+     * @param clazz a class reference for the returned value. You can get it by ::class.
+     *              For example String::class.
+     *
+     * @return mapped instance of the required data class.
+     */
     override fun <T : Any> readObject(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
         if (clazz.isSealed) {
             return handleDto(obj, clazz)
         }
         if (!clazz.isData) {
-            throw NotDataClassTypeException("Type '${clazz}' isn't data class type")
+            throw NotDataClassTypeException("Type '${clazz}' isn't a data class type")
         }
         val constructor = clazz.primaryConstructor!!
         val args = constructor.parameters
@@ -25,6 +39,12 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
         return constructor.callBy(params)
     }
 
+    /**
+     * DTO determines by inheritance from a sealed interface/class. Each DTO has to contain
+     * the DTO_FIELD_NAME field with his original class.
+     *
+     * @throws AttributeNotFoundException when the DTO_FIELD_NAME field isn't found in the object map.
+     */
     private fun <T : Any> handleDto(obj: Map<String, AttributeValue>, kClass: KClass<T>): T {
         val realClazz = obj[DTO_FIELD_NAME]?.s()
 
@@ -46,30 +66,12 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
         return readObject(obj, dtoClazz)
     }
 
-    private fun readParameter(param: KParameter, obj: Map<String, AttributeValue>): Any? {
-        val attr: AttributeValue? = obj[param.name]
-        if (attr == null) {
-            return null
-        }
-        return readValue(attr, param.type)
-    }
-
-    override fun readValue(attr: AttributeValue, kType: KType): Any {
-        val clazz = kType.classifier as KClass<*>
-        if (clazz.isData || clazz.isSealed) {
-            return readObject(attr.m(), clazz)
-        }
-        val converter = registry.registry[clazz]
-        if (converter != null) {
-            return converter.read(this, attr, kType)
-        }
-        val superClasses = clazz.supertypes.mapNotNull { registry.registry[it.classifier] }
-        if (superClasses.isNotEmpty()) {
-            return superClasses.first().read(this, attr, kType)
-        }
-        throw UnknownTypeException("Unknown type: $clazz")
-    }
-
+    /**
+     * Checks that object map contains all required fields for the data class.
+     *
+     * @throws RequiredFieldNotFoundException when all required for the data class isn't found
+     *                                        in object map.
+     */
     private fun checkRequiredFields(
         obj: Map<String, AttributeValue>,
         args: List<KParameter>,
@@ -90,5 +92,43 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
                 }] for $clazz", notFoundFields
             )
         }
+    }
+
+    /**
+     * Helper function gets out information about field type from the KParameter and gets out
+     * field value from object map.
+     */
+    private fun readParameter(param: KParameter, obj: Map<String, AttributeValue>): Any? {
+        val attr: AttributeValue? = obj[param.name]
+        if (attr == null) {
+            return null
+        }
+        return readValue(attr, param.type)
+    }
+
+    /**
+     * Reads AttributeValue to any class.
+     * It is an internal method used for recursive reading of nested case classes and collections.
+     * You can use it when you have KType for the returned value.
+     *
+     * @param attr instance of AttributeValue.
+     * @param kType type information about the returned value.
+     *              You can get it from the experimental typeof<> function. For example typeof<String>.
+     * @return mapped instance of value with type from kType.
+     */
+    override fun readValue(attr: AttributeValue, kType: KType): Any {
+        val clazz = kType.classifier as KClass<*>
+        if (clazz.isData || clazz.isSealed) {
+            return readObject(attr.m(), clazz)
+        }
+        val converter = registry.registry[clazz]
+        if (converter != null) {
+            return converter.read(this, attr, kType)
+        }
+        val superClasses = clazz.supertypes.mapNotNull { registry.registry[it.classifier] }
+        if (superClasses.isNotEmpty()) {
+            return superClasses.first().read(this, attr, kType)
+        }
+        throw UnknownTypeException("Unknown type: $clazz")
     }
 }

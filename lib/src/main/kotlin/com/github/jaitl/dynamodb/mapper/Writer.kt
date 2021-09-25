@@ -33,6 +33,9 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
         return emptyMap()
     }
 
+    /**
+     * Helper function gets out information about field's type from the KProperty1.
+     */
     private fun writeProperty(prop: KProperty1<out Any, *>, obj: Any): AttributeValue? {
         val value: Any? = prop.getter.call(obj)
         if (value == null) {
