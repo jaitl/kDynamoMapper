@@ -96,8 +96,8 @@ internal class DtoTest {
         mapper.readObject(obj, SimpleDataDto::class)
     }
 
-    @Test(expected = AttributeNotFoundException::class)
-    fun testReadNotFoundAttribute() {
+    @Test(expected = RequiredFieldNotFoundException::class)
+    fun testReadDTOWithoutClassNameField() {
         val dtoMap = mapOf(
             "string" to stringAttribute("test"),
         )

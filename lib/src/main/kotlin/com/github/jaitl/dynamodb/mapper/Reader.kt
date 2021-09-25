@@ -43,15 +43,16 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
      * DTO determines by inheritance from a sealed interface/class. Each DTO has to contain
      * the DTO_FIELD_NAME field with the original class name.
      *
-     * @throws AttributeNotFoundException when the DTO_FIELD_NAME field isn't found
-     *                                    in the DynamoDb attribute map.
+     * @throws RequiredFieldNotFoundException when the DTO_FIELD_NAME field isn't found
+     *                                        in the DynamoDb attribute map.
      */
     private fun <T : Any> handleDto(obj: Map<String, AttributeValue>, kClass: KClass<T>): T {
         val realClazz = obj[DTO_FIELD_NAME]?.s()
 
         if (realClazz == null) {
-            throw AttributeNotFoundException(
-                "DTO '$kClass' has to contain attribute '${DTO_FIELD_NAME}'"
+            throw RequiredFieldNotFoundException(
+                "DTO '$kClass' has to contain attribute '${DTO_FIELD_NAME}'",
+                setOf(DTO_FIELD_NAME)
             )
         }
 
