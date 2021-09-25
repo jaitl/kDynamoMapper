@@ -8,7 +8,7 @@ import kotlin.reflect.full.isSuperclassOf
 import kotlin.reflect.full.primaryConstructor
 
 /**
- * Reads an DynamoDb attribute map to a case class.
+ * Reads a DynamoDb attribute map to a case class.
  *
  * @param registry list of converters for collections and external types.
  */
@@ -68,10 +68,10 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     }
 
     /**
-     * Checks that DynamoDb attribute map contains all required fields for the data class.
+     * Checks that the DynamoDb attribute map contains all required fields for the data class.
      *
      * @throws RequiredFieldNotFoundException when all required for the data class isn't found
-     *                                        in DynamoDb attribute map.
+     *                                        in the DynamoDb attribute map.
      */
     private fun checkRequiredFields(
         obj: Map<String, AttributeValue>,
@@ -97,7 +97,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
 
     /**
      * Helper function gets out field type from the KParameter and gets out
-     * field value from DynamoDb attribute map.
+     * field value from a DynamoDb attribute map.
      */
     private fun readParameter(param: KParameter, obj: Map<String, AttributeValue>): Any? {
         val attr: AttributeValue? = obj[param.name]

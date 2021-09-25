@@ -10,7 +10,7 @@ import kotlin.reflect.KType
  */
 interface KDynamoMapperWriter {
     /**
-     * Writes any object of a case class to DynamoDb attribute map.
+     * Writes any object of a case class to a DynamoDb attribute map.
      *
      * @param obj instance of a case class.
      * @return mapped instance of a DynamoDb attribute map.
@@ -18,7 +18,7 @@ interface KDynamoMapperWriter {
     fun writeObject(obj: Any): Map<String, AttributeValue>
 
     /**
-     * Writes any value to AttributeValue.
+     * Writes any value to a DynamoDb attribute.
      * It is an internal method used for recursive writing of nested case classes and collections.
      * You can use it when you have KType for the value.
      *
@@ -52,7 +52,7 @@ interface KDynamoMapperReader {
      * It is an internal method used for recursive reading of nested case classes and collections.
      * You can use it when you have KType for the returned value.
      *
-     * @param attr instance of DynamoDb attribute.
+     * @param attr instance of a DynamoDb attribute.
      * @param kType type information about the returned value.
      *              You can get it from the experimental typeof<> function. For example typeof<String>.
      * @return mapped instance of value with type from kType.

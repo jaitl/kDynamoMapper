@@ -7,13 +7,13 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.memberProperties
 
 /**
- * Writes a case class to DynamoDb attribute map.
+ * Writes a case class to a DynamoDb attribute map.
  *
  * @param registry list of converters for collections and external types.
  */
 class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDynamoMapperWriter {
     /**
-     * Writes any object of a case class to DynamoDb attribute map.
+     * Writes any object of a case class to a DynamoDb attribute map.
      *
      * @param obj instance of a case class.
      * @return mapped instance of a DynamoDb attribute map.
@@ -60,7 +60,7 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     }
 
     /**
-     * Writes any value to AttributeValue.
+     * Writes any value to a DynamoDb attribute.
      * It is an internal method used for recursive writing of nested case classes and collections.
      * You can use it when you have KType for the value.
      *
