@@ -2,8 +2,8 @@ package com.github.jaitl.dynamodb
 
 import com.github.jaitl.dynamodb.base.*
 import com.github.jaitl.dynamodb.mapper.Mapper
-import com.github.jaitl.dynamodb.mapper.mapAttribute
-import com.github.jaitl.dynamodb.mapper.numberAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.mapAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.numberAttribute
 import com.github.jaitl.dynamodb.mapper.updateAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeAction
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest

@@ -1,7 +1,7 @@
 package com.github.jaitl.dynamodb.mapper.converter.type
 
 import com.github.jaitl.dynamodb.mapper.Mapper
-import com.github.jaitl.dynamodb.mapper.stringAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.stringAttribute
 import org.junit.Test
 import java.util.*
 import kotlin.test.assertEquals

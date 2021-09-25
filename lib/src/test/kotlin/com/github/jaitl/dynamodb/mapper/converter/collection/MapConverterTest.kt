@@ -1,6 +1,10 @@
 package com.github.jaitl.dynamodb.mapper.converter.collection
 
-import com.github.jaitl.dynamodb.mapper.*
+import com.github.jaitl.dynamodb.mapper.Mapper
+import com.github.jaitl.dynamodb.mapper.UnsupportedKeyTypeException
+import com.github.jaitl.dynamodb.mapper.attribute.mapAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.numberAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.stringAttribute
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

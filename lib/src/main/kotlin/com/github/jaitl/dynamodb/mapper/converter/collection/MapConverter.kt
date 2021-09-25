@@ -1,8 +1,8 @@
 package com.github.jaitl.dynamodb.mapper.converter.collection
 
 import com.github.jaitl.dynamodb.mapper.*
+import com.github.jaitl.dynamodb.mapper.attribute.mapAttribute
 import com.github.jaitl.dynamodb.mapper.converter.TypeConverter
-import com.github.jaitl.dynamodb.mapper.mapAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import kotlin.reflect.KClass
 import kotlin.reflect.KType

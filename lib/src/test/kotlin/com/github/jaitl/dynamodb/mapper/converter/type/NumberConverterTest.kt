@@ -2,8 +2,7 @@ package com.github.jaitl.dynamodb.mapper.converter.type
 
 import com.github.jaitl.dynamodb.mapper.Mapper
 import com.github.jaitl.dynamodb.mapper.UnknownTypeException
-import com.github.jaitl.dynamodb.mapper.numberAttribute
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import com.github.jaitl.dynamodb.mapper.attribute.numberAttribute
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

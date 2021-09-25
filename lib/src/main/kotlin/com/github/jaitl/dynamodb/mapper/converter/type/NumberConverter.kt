@@ -2,7 +2,7 @@ package com.github.jaitl.dynamodb.mapper.converter.type
 
 import com.github.jaitl.dynamodb.mapper.*
 import com.github.jaitl.dynamodb.mapper.converter.TypeConverter
-import com.github.jaitl.dynamodb.mapper.numberAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.numberAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import kotlin.reflect.KClass
 import kotlin.reflect.KType

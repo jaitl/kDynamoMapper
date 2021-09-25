@@ -1,5 +1,6 @@
 package com.github.jaitl.dynamodb.mapper
 
+import com.github.jaitl.dynamodb.mapper.attribute.stringAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeAction
 import software.amazon.awssdk.services.dynamodb.model.AttributeValueUpdate
 import kotlin.test.Test

@@ -1,17 +1,14 @@
 package com.github.jaitl.dynamodb
 
-import com.github.jaitl.dynamodb.base.*
+import com.github.jaitl.dynamodb.base.DynamoDbTestSuite
+import com.github.jaitl.dynamodb.base.TableConfig
+import com.github.jaitl.dynamodb.base.helpCreateTable
+import com.github.jaitl.dynamodb.base.helpPutItem
 import com.github.jaitl.dynamodb.mapper.Mapper
-import com.github.jaitl.dynamodb.mapper.mapAttribute
-import com.github.jaitl.dynamodb.mapper.numberAttribute
-import com.github.jaitl.dynamodb.mapper.updateAttribute
-import software.amazon.awssdk.services.dynamodb.model.AttributeAction
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
-import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest
 import java.time.Instant
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 internal class DeleteObjectTest : DynamoDbTestSuite() {

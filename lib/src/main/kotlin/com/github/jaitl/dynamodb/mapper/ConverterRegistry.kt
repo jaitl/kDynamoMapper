@@ -19,7 +19,7 @@ data class ConverterRegistry(val registry: Map<KClass<*>, TypeConverter<*>>)
  * Map with default converters.
  */
 val DEFAULT_CONVERTERS: Map<KClass<*>, TypeConverter<*>> = listOf(
-    //collections
+    // collections
     ListConverter(),
     SetConverter(NumberConverter()),
     MapConverter(),

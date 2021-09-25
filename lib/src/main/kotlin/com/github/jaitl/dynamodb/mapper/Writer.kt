@@ -1,5 +1,7 @@
 package com.github.jaitl.dynamodb.mapper
 
+import com.github.jaitl.dynamodb.mapper.attribute.mapAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.stringAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1

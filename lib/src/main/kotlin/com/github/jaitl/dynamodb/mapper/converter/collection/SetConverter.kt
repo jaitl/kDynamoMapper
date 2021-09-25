@@ -1,6 +1,10 @@
 package com.github.jaitl.dynamodb.mapper.converter.collection
 
-import com.github.jaitl.dynamodb.mapper.*
+import com.github.jaitl.dynamodb.mapper.KDynamoMapperReader
+import com.github.jaitl.dynamodb.mapper.KDynamoMapperWriter
+import com.github.jaitl.dynamodb.mapper.attribute.numberSetAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.setAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.stringSetAttribute
 import com.github.jaitl.dynamodb.mapper.converter.TypeConverter
 import com.github.jaitl.dynamodb.mapper.converter.type.NumberConverter
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue

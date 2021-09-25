@@ -1,5 +1,9 @@
 package com.github.jaitl.dynamodb.mapper
 
+import com.github.jaitl.dynamodb.mapper.attribute.booleanAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.mapAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.numberAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.stringAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import java.time.Instant
 import java.time.format.DateTimeFormatter
