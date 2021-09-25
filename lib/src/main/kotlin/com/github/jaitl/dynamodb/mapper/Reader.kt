@@ -8,19 +8,19 @@ import kotlin.reflect.full.isSuperclassOf
 import kotlin.reflect.full.primaryConstructor
 
 /**
- * Reads an object map from DynamoDb to a case class.
+ * Reads an DynamoDb attribute map to a case class.
  *
  * @param registry list of converters for collections and external types.
  */
 class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDynamoMapperReader {
     /**
-     * Reads Map<String, AttributeValue> to a case class.
+     * Reads a DynamoDb attribute map to a case class.
      *
-     * @param obj an instance of Map<String, AttributeValue>.
+     * @param obj an instance of a DynamoDb attribute map.
      * @param clazz a class reference for the returned value. You can get it by ::class.
      *              For example String::class.
      *
-     * @return mapped instance of the required data class.
+     * @return mapped instance of a data class.
      */
     override fun <T : Any> readObject(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
         if (clazz.isSealed) {
@@ -41,9 +41,10 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
 
     /**
      * DTO determines by inheritance from a sealed interface/class. Each DTO has to contain
-     * the DTO_FIELD_NAME field with his original class.
+     * the DTO_FIELD_NAME field with an original class name.
      *
-     * @throws AttributeNotFoundException when the DTO_FIELD_NAME field isn't found in the object map.
+     * @throws AttributeNotFoundException when the DTO_FIELD_NAME field isn't found
+     *                                    in the DynamoDb attribute map.
      */
     private fun <T : Any> handleDto(obj: Map<String, AttributeValue>, kClass: KClass<T>): T {
         val realClazz = obj[DTO_FIELD_NAME]?.s()
@@ -67,10 +68,10 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     }
 
     /**
-     * Checks that object map contains all required fields for the data class.
+     * Checks that DynamoDb attribute map contains all required fields for the data class.
      *
      * @throws RequiredFieldNotFoundException when all required for the data class isn't found
-     *                                        in object map.
+     *                                        in DynamoDb attribute map.
      */
     private fun checkRequiredFields(
         obj: Map<String, AttributeValue>,
@@ -95,8 +96,8 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     }
 
     /**
-     * Helper function gets out information about field type from the KParameter and gets out
-     * field value from object map.
+     * Helper function gets out field type from the KParameter and gets out
+     * field value from DynamoDb attribute map.
      */
     private fun readParameter(param: KParameter, obj: Map<String, AttributeValue>): Any? {
         val attr: AttributeValue? = obj[param.name]
@@ -111,7 +112,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
      * It is an internal method used for recursive reading of nested case classes and collections.
      * You can use it when you have KType for the returned value.
      *
-     * @param attr instance of AttributeValue.
+     * @param attr instance of DynamoDb attribute.
      * @param kType type information about the returned value.
      *              You can get it from the experimental typeof<> function. For example typeof<String>.
      * @return mapped instance of value with type from kType.
