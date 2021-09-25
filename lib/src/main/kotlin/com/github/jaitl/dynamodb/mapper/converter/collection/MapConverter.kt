@@ -62,7 +62,7 @@ class MapConverter : TypeConverter<Map<*, *>> {
     }
 
     /**
-     * Type of converter
+     * @return type of this converter
      */
     override fun type(): KClass<Map<*, *>> = Map::class
 }

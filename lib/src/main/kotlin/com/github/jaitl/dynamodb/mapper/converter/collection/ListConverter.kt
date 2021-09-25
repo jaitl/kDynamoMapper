@@ -36,7 +36,7 @@ class ListConverter : TypeConverter<List<*>> {
     }
 
     /**
-     * Type of converter
+     * @return type of this converter
      */
     override fun type(): KClass<List<*>> = List::class
 }

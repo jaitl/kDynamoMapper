@@ -60,7 +60,7 @@ class SetConverter(private val numberConverter: NumberConverter) : TypeConverter
     }
 
     /**
-     * Type of converter
+     * @return type of this converter
      */
     override fun type(): KClass<Set<*>> = Set::class
 }
