@@ -12,7 +12,16 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.isSubclassOf
 
+/**
+ * Converts Set<*> to AttributeValue and vice versa.
+ * Supports Number Set and String Set.
+ *
+ * Set<*> stores as List to DynamoDb AttributeValue
+ */
 class SetConverter(private val numberConverter: NumberConverter) : TypeConverter<Set<*>> {
+    /**
+     * Reads DynamoDb attribute map to Set<*>
+     */
     override fun read(reader: KDynamoMapperReader, attr: AttributeValue, kType: KType): Set<*> {
         val setType = kType.arguments.first().type!!
         val clazz = setType.classifier as KClass<*>
@@ -27,6 +36,9 @@ class SetConverter(private val numberConverter: NumberConverter) : TypeConverter
         return attr.l().filterNotNull().map { reader.readValue(it, setType) }.toSet()
     }
 
+    /**
+     * Writes Set<*> to DynamoDb attribute map
+     */
     override fun write(writer: KDynamoMapperWriter, value: Any, kType: KType): AttributeValue {
         val collection = value as Set<*>
         val setType = kType.arguments.first().type!!
@@ -47,5 +59,8 @@ class SetConverter(private val numberConverter: NumberConverter) : TypeConverter
         return setAttribute(set)
     }
 
+    /**
+     * Type of converter
+     */
     override fun type(): KClass<Set<*>> = Set::class
 }
