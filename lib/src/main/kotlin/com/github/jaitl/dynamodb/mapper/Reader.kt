@@ -40,7 +40,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     }
 
     /**
-     * ADT determines by inheritance from a sealed interface/class. Each ADT has to contain
+     * ADT are determined by inheritance from a sealed interface/class. Each ADT has to contain
      * the ADT_FIELD_NAME field with the original class name.
      *
      * @throws RequiredFieldNotFoundException when the ADT_FIELD_NAME field isn't found
@@ -61,7 +61,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
 
         if (!kClass.isSuperclassOf(adtClazz)) {
             throw UnknownTypeException(
-                "Class '${kClass.qualifiedName}' isn't subclass of '${adtClazz}'"
+                "Class '${kClass.qualifiedName}' isn't a subclass of '${adtClazz}'"
             )
         }
 
