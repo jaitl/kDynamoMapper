@@ -31,20 +31,20 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
             .filter { it.second != null }
             .associate { it.first.name to it.second!! }
 
-        return attrsMap + dtoClassInfo(clazz)
+        return attrsMap + adtClassInfo(clazz)
     }
 
     /**
-     * DTO determines by inheritance from a sealed interface/class. Each DTO has to contain
-     * the DTO_FIELD_NAME field with the original class name.
+     * ADT determines by inheritance from a sealed interface/class. Each ADT has to contain
+     * the ADT_FIELD_NAME field with the original class name.
      */
-    private fun dtoClassInfo(clazz: KClass<*>): Map<String, AttributeValue> {
+    private fun adtClassInfo(clazz: KClass<*>): Map<String, AttributeValue> {
         val hasSealedParent = clazz.supertypes
             .map { it.classifier as KClass<*> }
             .any { it.isSealed }
 
         if (hasSealedParent) {
-            return mapOf(DTO_FIELD_NAME to stringAttribute(clazz.java.name))
+            return mapOf(ADT_FIELD_NAME to stringAttribute(clazz.java.name))
         }
 
         return emptyMap()

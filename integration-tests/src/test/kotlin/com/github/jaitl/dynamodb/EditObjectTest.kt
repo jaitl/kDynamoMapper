@@ -85,19 +85,19 @@ internal class EditObjectTest : DynamoDbTestSuite() {
     }
 
     @Test
-    fun testUpdateDto() {
+    fun testUpdateAdt() {
         dynamoDbClient.helpCreateTable(table)
 
-        val data = MyClass("1", Dto.DtoOne(1234, "one one"))
+        val data = MyClass("1", Adt.AdtOne(1234, "one one"))
 
         dynamoDbClient.helpPutItem(data, table.tableName)
 
         val itemKey = mapper.writeObject(MyKey("1"))
-        val updatedDto = Dto.DtoTwo(4321L, Instant.now(), 4444.0)
+        val updatedAdt = Adt.AdtTwo(4321L, Instant.now(), 4444.0)
 
         val updatedValues = mapOf(
-            "dto" to updateAttribute(
-                attribute = mapAttribute(mapper.writeObject(updatedDto)),
+            "adt" to updateAttribute(
+                attribute = mapAttribute(mapper.writeObject(updatedAdt)),
                 action = AttributeAction.PUT
             )
         )
@@ -112,7 +112,7 @@ internal class EditObjectTest : DynamoDbTestSuite() {
 
         val updatedItem = dynamoDbClient.helpGetItem(MyKey("1"), table.tableName, MyClass::class)
 
-        val expectedItem = data.copy(dto = updatedDto)
+        val expectedItem = data.copy(adt = updatedAdt)
 
         assertEquals(expectedItem, updatedItem)
     }

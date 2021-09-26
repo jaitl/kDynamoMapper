@@ -24,7 +24,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
      */
     override fun <T : Any> readObject(obj: Map<String, AttributeValue>, clazz: KClass<T>): T {
         if (clazz.isSealed) {
-            return handleDto(obj, clazz)
+            return handleAdt(obj, clazz)
         }
         if (!clazz.isData) {
             throw NotDataClassTypeException("Type '${clazz}' isn't a data class type")
@@ -40,32 +40,32 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     }
 
     /**
-     * DTO determines by inheritance from a sealed interface/class. Each DTO has to contain
-     * the DTO_FIELD_NAME field with the original class name.
+     * ADT determines by inheritance from a sealed interface/class. Each ADT has to contain
+     * the ADT_FIELD_NAME field with the original class name.
      *
-     * @throws RequiredFieldNotFoundException when the DTO_FIELD_NAME field isn't found
+     * @throws RequiredFieldNotFoundException when the ADT_FIELD_NAME field isn't found
      *                                        in the DynamoDb attribute map.
      */
-    private fun <T : Any> handleDto(obj: Map<String, AttributeValue>, kClass: KClass<T>): T {
-        val realClazz = obj[DTO_FIELD_NAME]?.s()
+    private fun <T : Any> handleAdt(obj: Map<String, AttributeValue>, kClass: KClass<T>): T {
+        val realClazz = obj[ADT_FIELD_NAME]?.s()
 
         if (realClazz == null) {
             throw RequiredFieldNotFoundException(
-                "DTO '$kClass' has to contain attribute '${DTO_FIELD_NAME}'",
-                setOf(DTO_FIELD_NAME)
+                "ADT '$kClass' has to contain attribute '${ADT_FIELD_NAME}'",
+                setOf(ADT_FIELD_NAME)
             )
         }
 
         @Suppress("UNCHECKED_CAST")
-        val dtoClazz = Class.forName(realClazz).kotlin as KClass<T>
+        val adtClazz = Class.forName(realClazz).kotlin as KClass<T>
 
-        if (!kClass.isSuperclassOf(dtoClazz)) {
+        if (!kClass.isSuperclassOf(adtClazz)) {
             throw UnknownTypeException(
-                "Class '${kClass.qualifiedName}' isn't subclass of '${dtoClazz}'"
+                "Class '${kClass.qualifiedName}' isn't subclass of '${adtClazz}'"
             )
         }
 
-        return readObject(obj, dtoClazz)
+        return readObject(obj, adtClazz)
     }
 
     /**
