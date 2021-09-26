@@ -3,7 +3,8 @@ package com.github.jaitl.dynamodb.mapper
 import com.github.jaitl.dynamodb.mapper.attribute.mapAttribute
 import com.github.jaitl.dynamodb.mapper.attribute.numberAttribute
 import com.github.jaitl.dynamodb.mapper.attribute.stringAttribute
-import com.github.jaitl.dynamodb.mapper.helper.*
+import com.github.jaitl.dynamodb.mapper.helper.SimpleDataDto
+import com.github.jaitl.dynamodb.mapper.helper.SimpleDto
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,13 +14,13 @@ internal class DtoTest {
 
     @Test
     fun testWriteSimpleDto() {
-        val data = SimpleDataDto(DtoOne("test"))
+        val data = SimpleDataDto(SimpleDto.DtoOne("test"))
 
         val map = mapper.writeObject(data)
 
         val dtoMap = mapOf(
             "string" to stringAttribute("test"),
-            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.DtoOne")
+            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.SimpleDto\$DtoOne")
         )
         val expectedMap = mapOf(
             "dto" to mapAttribute(dtoMap),
@@ -32,7 +33,7 @@ internal class DtoTest {
     fun testReadSimpleDto() {
         val dtoMap = mapOf(
             "string" to stringAttribute("test"),
-            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.DtoOne")
+            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.SimpleDto\$DtoOne")
         )
         val obj = mapOf(
             "dto" to mapAttribute(dtoMap),
@@ -40,7 +41,7 @@ internal class DtoTest {
 
         val data = mapper.readObject(obj, SimpleDataDto::class)
 
-        val expectedData = SimpleDataDto(DtoOne("test"))
+        val expectedData = SimpleDataDto(SimpleDto.DtoOne("test"))
 
         assertEquals(expectedData, data)
     }
@@ -49,26 +50,40 @@ internal class DtoTest {
     fun testReadDtoBySealedClass() {
         val dtoMap = mapOf(
             "long" to numberAttribute(1234),
-            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.DtoTwo")
+            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.SimpleDto\$DtoTwo")
         )
 
         val data = mapper.readObject(dtoMap, SimpleDto::class)
 
-        val expectedData = DtoTwo(1234)
+        val expectedData = SimpleDto.DtoTwo(1234)
 
         assertEquals(expectedData, data)
+    }
+
+    @Test
+    fun testWriteDtoBySealedClassInherited() {
+        val data = SimpleDto.SecondSimpleDto.DtoSecondOne(1234.654)
+
+        val attrs = mapper.writeObject(data)
+
+        val expectedData = mapOf(
+            "double" to numberAttribute(1234.654),
+            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.SimpleDto\$SecondSimpleDto\$DtoSecondOne")
+        )
+
+        assertEquals(expectedData, attrs)
     }
 
     @Test
     fun testReadDtoBySealedClassInherited() {
         val dtoMap = mapOf(
             "double" to numberAttribute(1234.654),
-            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.DtoSecondOne")
+            "dto_class_name" to stringAttribute("com.github.jaitl.dynamodb.mapper.helper.SimpleDto\$SecondSimpleDto\$DtoSecondOne")
         )
 
         val data = mapper.readObject(dtoMap, SimpleDto::class)
 
-        val expectedData = DtoSecondOne(1234.654)
+        val expectedData = SimpleDto.SecondSimpleDto.DtoSecondOne(1234.654)
 
         assertEquals(expectedData, data)
     }

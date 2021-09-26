@@ -44,7 +44,7 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
             .any { it.isSealed }
 
         if (hasSealedParent) {
-            return mapOf(DTO_FIELD_NAME to stringAttribute(clazz.qualifiedName!!))
+            return mapOf(DTO_FIELD_NAME to stringAttribute(clazz.java.name))
         }
 
         return emptyMap()

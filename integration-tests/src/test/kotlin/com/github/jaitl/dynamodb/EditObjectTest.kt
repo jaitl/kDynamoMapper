@@ -88,12 +88,12 @@ internal class EditObjectTest : DynamoDbTestSuite() {
     fun testUpdateDto() {
         dynamoDbClient.helpCreateTable(table)
 
-        val data = MyClass("1", DtoOne(1234, "one one"))
+        val data = MyClass("1", Dto.DtoOne(1234, "one one"))
 
         dynamoDbClient.helpPutItem(data, table.tableName)
 
         val itemKey = mapper.writeObject(MyKey("1"))
-        val updatedDto = DtoTwo(4321L, Instant.now(), 4444.0)
+        val updatedDto = Dto.DtoTwo(4321L, Instant.now(), 4444.0)
 
         val updatedValues = mapOf(
             "dto" to updateAttribute(
