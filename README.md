@@ -7,18 +7,16 @@
 
 Lightweight AWS DynamoDB mapper for Kotlin written in pure Kotlin.
 
-It exists because I haven't found a mapper that supports immutable data classes.
+*kDynamoMapper* supports ***only*** [AWS SDK for Java 2.x](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/examples-dynamodb.html).
 
-***kDynamoMapper*** supports [_AWS SDK for Java 2.x_](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/examples-dynamodb.html) only.
-
-***kDynamoMapper*** maps a `data class` to [AttributeValue](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html) and vice versa.
-***kDynamoMapper*** doesn't wrap `DynamoDbClient`. You have to use original `DynamoDbClient` from [AWS SDK for Java 2.0](https://github.com/aws/aws-sdk-java-v2) to work with DynamoDB.
+*kDynamoMapper* maps a `data class` to [AttributeValue](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html) and vice versa.
+*kDynamoMapper* doesn't wrap `DynamoDbClient`. You have to use original `DynamoDbClient` from [AWS SDK for Java 2.0](https://github.com/aws/aws-sdk-java-v2) to work with DynamoDB.
 
 ## Installation
 Artifact is being deployed to maven central.
 
 ## Usage
-***kDynamoMapper*** supports data classes only. When a data class contains another data class as property it will be mapped as well.
+*kDynamoMapper* supports ***only*** data classes. When a data class contains another data class as property it will be mapped as well.
 
 ### Mapper creating
 ```kotlin
@@ -107,8 +105,71 @@ You can run and play with the examples in integration tests.
 ADT are determined by inheritance from a sealed interface/class. 
 Each ADT contains the 'adt_class_name' field with the original class name.
 
-## Set up a custom converter
+### ADT data classes
+```kotlin
+sealed class Adt {
+    data class AdtOne(val int: Int, val string: String) : Adt()
+    data class AdtTwo(val long: Long, val instant: Instant, val double: Double) : Adt()
+}
 
+data class MyKey(val id: String)
+data class MyAdtData(val id: String, val adt: Adt)
+```
+
+### Writing
+```kotlin
+// put
+val data = MyAdtData("1", Adt.AdtOne(1234, "one one"))
+
+val dynamoData = mapper.writeObject(data)
+
+val putRequest = PutItemRequest.builder()
+    .tableName(table.tableName)
+    .item(dynamoData)
+    .build()
+
+dynamoDbClient.putItem(putRequest)
+```
+
+### Updating
+```kotlin
+// update
+val itemKey = mapper.writeObject(MyKey("1"))
+val updatedAdt = Adt.AdtTwo(4321L, Instant.now(), 4444.0)
+
+val updatedValues = mapOf(
+    "adt" to updateAttribute(
+        attribute = mapAttribute(mapper.writeObject(updatedAdt)),
+        action = AttributeAction.PUT
+    )
+)
+
+val updateRequest = UpdateItemRequest.builder()
+    .tableName(table.tableName)
+    .key(itemKey)
+    .attributeUpdates(updatedValues)
+    .build()
+
+dynamoDbClient.updateItem(updateRequest)
+```
+
+### Reading
+```kotlin
+
+val keyValue = mapper.writeObject(MyKey("1"))
+
+val getRequest = GetItemRequest.builder()
+    .key(keyValue)
+    .tableName(table.tableName)
+    .build()
+
+val result = dynamoDbClient.getItem(getRequest)
+
+val updatedItem = mapper.readObject(result.item(), MyAdtData::class)
+```
+
+## Set up a custom converter
+in progress
 
 ## Contribution
 1. There are several [opened issues](https://github.com/jaitl/kDynamoMapper/issues). When you want to resolve an opened issue don't forget to write about it in the issue.

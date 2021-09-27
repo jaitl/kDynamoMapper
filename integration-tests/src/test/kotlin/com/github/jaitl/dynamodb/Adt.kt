@@ -8,4 +8,4 @@ sealed class Adt {
 }
 
 data class MyKey(val id: String)
-data class MyClass(val id: String, val adt: Adt)
+data class MyAdtData(val id: String, val adt: Adt)
