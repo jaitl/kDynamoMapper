@@ -9,11 +9,11 @@ import software.amazon.awssdk.services.dynamodb.model.*
 import java.net.URI
 import kotlin.reflect.KClass
 
-internal data class TableConfig(val tableName: String, val keyName: String)
+data class TableConfig(val tableName: String, val keyName: String)
 
 private val mapper = Mapper()
 
-internal fun DynamoDbClient.helpCreateTable(tableConfig: TableConfig): CreateTableResponse {
+fun DynamoDbClient.helpCreateTable(tableConfig: TableConfig): CreateTableResponse {
     val request: CreateTableRequest = CreateTableRequest.builder()
         .attributeDefinitions(
             AttributeDefinition.builder()
@@ -70,7 +70,7 @@ fun <T : Any> DynamoDbClient.helpGetItem(key: Any, table: String, clazz: KClass<
     val getRequest = GetItemRequest.builder()
         .key(keyValue)
         .tableName(table)
-        .build();
+        .build()
 
     val result = getItem(getRequest)
     println(result)
