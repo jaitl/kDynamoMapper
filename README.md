@@ -101,7 +101,7 @@ dynamoDbClient.updateItem(updateRequest)
 
 You can run and play with the examples in integration tests.
 
-## ADT supported
+## ADT support
 ADT are determined by inheritance from a sealed interface/class. 
 Each ADT contains the 'adt_class_name' field with the original class name.
 
@@ -170,6 +170,7 @@ val updatedItem = mapper.readObject(result.item(), MyAdtData::class)
 
 ## Set up a custom converter
 in progress
+***Please***, if you have written a converter for a common data type that will be useful to other users, contribute it to the project.
 
 ## Contribution
 1. There are several [opened issues](https://github.com/jaitl/kDynamoMapper/issues). When you want to resolve an opened issue don't forget to write about it in the issue.
