@@ -97,8 +97,8 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     }
 
     /**
-     * Helper function gets out field type from the KParameter and gets out
-     * field value from a DynamoDb attribute map.
+     * Helper function gets field type out of a KParameter and gets
+     * field value out of a DynamoDb attribute map.
      */
     private fun readParameter(param: KParameter, obj: Map<String, AttributeValue>): Any? {
         val attr: AttributeValue? = obj[param.name]

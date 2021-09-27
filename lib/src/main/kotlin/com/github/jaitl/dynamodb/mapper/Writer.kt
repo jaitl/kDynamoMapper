@@ -23,7 +23,7 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     override fun writeObject(obj: Any): Map<String, AttributeValue> {
         val clazz = obj::class
         if (!clazz.isData) {
-            throw NotDataClassTypeException("Type '${clazz}' isn't data class type")
+            throw NotDataClassTypeException("Type '${clazz}' isn't a data class type")
         }
         val members = clazz.memberProperties
         val attrsMap = members
@@ -51,7 +51,7 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     }
 
     /**
-     * Helper function gets out field type and field value from the KProperty1.
+     * Helper function gets field type and field value out of the KProperty1.
      */
     private fun writeProperty(prop: KProperty1<out Any, *>, obj: Any): AttributeValue? {
         val value: Any? = prop.getter.call(obj)
@@ -68,8 +68,7 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
      *
      * @param value instance of any value. For example Int, String, Instant, etc.
      * @param kType type information about the value. You can get it
-     *              from the experimental typeof<> function.
-     *              For example typeof<String>.
+     *              from the experimental typeof<> function. For example typeof<String>.
      * @return mapped instance a DynamoDb attribute.
      */
     override fun writeValue(value: Any, kType: KType): AttributeValue {
