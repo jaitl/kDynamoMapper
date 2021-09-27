@@ -20,6 +20,8 @@ subprojects {
         implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
+        implementation("software.amazon.awssdk:dynamodb:2.17.40")
+
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     }

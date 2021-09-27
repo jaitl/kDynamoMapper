@@ -7,6 +7,13 @@ Lightweight AWS DynamoDB mapper for Kotlin written in pure Kotlin.
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jaitl/kDynamoMapper/blob/main/LICENSE)
 
+***kDynamoMapper*** exists because I haven't found a mapper that supports immutable data classes.
+
+***kDynamoMapper*** supports [_AWS SDK for Java 2.x_](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/examples-dynamodb.html) only.
+
+***kDynamoMapper*** maps a `data class` to [AttributeValue](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html) and vice versa.
+***kDynamoMapper*** doesn't wrap `DynamoDbClient`. You have to use original `DynamoDbClient` from `AWS SDK 2` to work with DynamoDB.
+
 ## Installation
 Artifact is being deployed to maven central.
 
