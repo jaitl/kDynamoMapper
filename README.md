@@ -103,7 +103,7 @@ You can run and play with the examples in integration tests.
 
 ## ADT support
 ADT are determined by inheritance from a sealed interface/class. 
-Each ADT contains the 'adt_class_name' field with the original class name.
+Each ADT contains the `adt_class_name` field with the original class name.
 
 ### ADT data classes
 ```kotlin
