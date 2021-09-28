@@ -6,6 +6,7 @@ import com.github.jaitl.dynamodb.base.helpCreateTable
 import com.github.jaitl.dynamodb.mapper.Mapper
 import com.github.jaitl.dynamodb.mapper.attribute.mapAttribute
 import com.github.jaitl.dynamodb.mapper.updateAttribute
+import com.github.jaitl.dynamodb.mapper.writeValue
 import software.amazon.awssdk.services.dynamodb.model.AttributeAction
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
@@ -41,7 +42,7 @@ class AdtTest : DynamoDbTestSuite() {
 
         val updatedValues = mapOf(
             "adt" to updateAttribute(
-                attribute = mapAttribute(mapper.writeObject(updatedAdt)),
+                attribute = mapper.writeValue(updatedAdt),
                 action = AttributeAction.PUT
             )
         )

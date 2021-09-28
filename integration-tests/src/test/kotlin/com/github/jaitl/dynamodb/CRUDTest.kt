@@ -9,6 +9,7 @@ import com.github.jaitl.dynamodb.mapper.Mapper
 import com.github.jaitl.dynamodb.mapper.attribute.mapAttribute
 import com.github.jaitl.dynamodb.mapper.attribute.numberAttribute
 import com.github.jaitl.dynamodb.mapper.updateAttribute
+import com.github.jaitl.dynamodb.mapper.writeValue
 import software.amazon.awssdk.services.dynamodb.model.*
 import java.time.Instant
 import kotlin.test.Test
@@ -68,7 +69,7 @@ class CRUDTest : DynamoDbTestSuite() {
 
         val updatedValues = mapOf(
             "dataInt" to updateAttribute(
-                attribute = numberAttribute(4321),
+                attribute = mapper.writeValue(4321),
                 action = AttributeAction.PUT
             )
         )
@@ -99,7 +100,7 @@ class CRUDTest : DynamoDbTestSuite() {
 
         val updatedValues = mapOf(
             "nested" to updateAttribute(
-                attribute = mapAttribute(mapper.writeObject(newNested)),
+                attribute = mapper.writeValue(newNested),
                 action = AttributeAction.PUT
             )
         )

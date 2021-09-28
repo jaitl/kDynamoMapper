@@ -64,7 +64,7 @@ val itemKey = mapper.writeObject(MyKey("1"))
 
 val updatedValues = mapOf(
     "dataInt" to updateAttribute(
-        attribute = numberAttribute(4321),
+        attribute = mapper.writeValue(4321),
         action = AttributeAction.PUT
     )
 )
@@ -85,7 +85,7 @@ val newNested = NestedObject(4321.33, Instant.now().plusSeconds(1000))
 
 val updatedValues = mapOf(
     "nested" to updateAttribute(
-        attribute = mapAttribute(mapper.writeObject(newNested)),
+        attribute = mapper.writeValue(newNested),
         action = AttributeAction.PUT
     )
 )
@@ -137,7 +137,7 @@ val updatedAdt = Adt.AdtTwo(4321L, Instant.now(), 4444.0)
 
 val updatedValues = mapOf(
     "adt" to updateAttribute(
-        attribute = mapAttribute(mapper.writeObject(updatedAdt)),
+        attribute = mapper.writeValue(updatedAdt),
         action = AttributeAction.PUT
     )
 )
