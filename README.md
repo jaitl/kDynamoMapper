@@ -16,7 +16,7 @@ Lightweight AWS DynamoDB mapper for Kotlin written in pure Kotlin.
 Artifact is being deployed to maven central.
 
 ## Usage
-*kDynamoMapper* supports ***only*** data classes. When a data class contains another data class as property it will be mapped as well.
+*kDynamoMapper* supports ***only*** data classes. When a data class contains another data class as a property it will be mapped as well.
 
 ### Mapper creating
 ```kotlin
