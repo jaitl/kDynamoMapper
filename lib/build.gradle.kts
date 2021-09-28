@@ -29,17 +29,14 @@ java {
     withSourcesJar()
 }
 
-signing {
-    sign(publishing.publications)
-}
-
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
+            from(components["java"])
+
             groupId = "pro.jaitl"
             artifactId = "k-dynamo-mapper"
             version = "0.0.1"
-            from(components["java"])
             pom {
                 name.set("kDynamoMapper")
                 description.set("Lightweight AWS DynamoDB mapper for Kotlin.")
@@ -84,4 +81,8 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign(publishing.publications["mavenJava"])
 }
