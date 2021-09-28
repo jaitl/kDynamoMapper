@@ -166,7 +166,120 @@ val updatedItem = mapper.readObject(result.item(), MyAdtData::class)
 ```
 
 ## Set up a custom converter
-in progress
+### Custom types
+```kotlin
+class SimpleDataType(val instant: Instant)
+class ComplexDataType(val string: String, val int: Int, val simpleDataType: SimpleDataType)
+```
+
+### Data classes
+```kotlin
+data class MyDataClass(
+    val id: String,
+    val simpleDataType: SimpleDataType,
+    val complexDataType: ComplexDataType
+)
+data class MyDataKey(val id: String)
+```
+
+### Converter for a simple custom type
+This converter returns the custom data type as value.
+```kotlin
+class SimpleDataTypeConverter : TypeConverter<SimpleDataType> {
+    override fun read(
+        reader: KDynamoMapperReader,
+        attr: AttributeValue,
+        kType: KType
+    ): SimpleDataType {
+        return SimpleDataType(
+            instant = reader.readValue(attr)
+        )
+    }
+
+    override fun write(writer: KDynamoMapperWriter, value: Any, kType: KType): AttributeValue {
+        val myData = value as SimpleDataType
+        return writer.writeValue(myData.instant)
+    }
+
+    override fun type(): KClass<SimpleDataType> = SimpleDataType::class
+}
+```
+
+### Converter for a complex data type
+This converter returns the custom data type as map.
+```kotlin
+class ComplexDataTypeConverter : TypeConverter<ComplexDataType> {
+    override fun read(
+        reader: KDynamoMapperReader,
+        attr: AttributeValue,
+        kType: KType
+    ): ComplexDataType {
+        val attrMap = attr.m()
+        return ComplexDataType(
+            string = reader.readValue(attrMap["string"]!!),
+            int = reader.readValue(attrMap["int"]!!),
+            simpleDataType = reader.readValue(attrMap["simpleDataType"]!!)
+        )
+    }
+
+    override fun write(writer: KDynamoMapperWriter, value: Any, kType: KType): AttributeValue {
+        val myData = value as ComplexDataType
+        return mapAttribute(
+            mapOf(
+                "string" to writer.writeValue(myData.string),
+                "int" to writer.writeValue(myData.int),
+                "simpleDataType" to writer.writeValue(myData.simpleDataType),
+            )
+        )
+    }
+
+    override fun type(): KClass<ComplexDataType> = ComplexDataType::class
+}
+```
+
+### Mapper creating
+Configure two custom converters then union them with default converters.
+```kotlin
+val customConvertersMap = listOf(SimpleDataTypeConverter(), ComplexDataTypeConverter())
+    .associateBy { it.type() }
+val registry = ConverterRegistry(DEFAULT_CONVERTERS + customConvertersMap)
+
+val mapper = Mapper(registry)
+```
+
+### Writing
+```kotlin
+val data = MyDataClass(
+    "1",
+    SimpleDataType(Instant.now()),
+    ComplexDataType("test", 1234, SimpleDataType(Instant.now().plusSeconds(1000)))
+)
+
+val dynamoData = mapper.writeObject(data)
+
+val putRequest = PutItemRequest.builder()
+    .tableName(table.tableName)
+    .item(dynamoData)
+    .build()
+
+dynamoDbClient.putItem(putRequest)
+```
+
+### Reading
+```kotlin
+val keyValue = mapper.writeObject(MyDataKey(data.id))
+
+val getRequest = GetItemRequest.builder()
+    .key(keyValue)
+    .tableName(table.tableName)
+    .build()
+
+val result = dynamoDbClient.getItem(getRequest)
+
+val actualData = mapper.readObject(result.item(), MyDataClass::class)
+```
+
+### Notice
 ***Please***, if you have written a converter for a common data type that will be useful to other users, contribute it to the project.
 
 ## Contribution
