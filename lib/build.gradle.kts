@@ -1,6 +1,8 @@
 plugins {
     `java-library`
+    `maven-publish`
     jacoco
+    signing
 }
 
 dependencies {
@@ -19,5 +21,67 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
         xml.required.set(true)
+    }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+signing {
+    sign(publishing.publications)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            groupId = "pro.jaitl"
+            artifactId = "k-dynamo-mapper"
+            version = "0.0.1"
+            from(components["java"])
+            pom {
+                name.set("kDynamoMapper")
+                description.set("Lightweight AWS DynamoDB mapper for Kotlin.")
+                url.set("https://github.com/jaitl/kDynamoMapper")
+                licenses {
+                    license {
+                        name.set("MIT")
+                        url.set("https://github.com/jaitl/kDynamoMapper/blob/main/LICENSE")
+                    }
+                }
+                organization {
+                    name.set("jaitl")
+                    url.set("https://github.com/jaitl")
+                }
+                issueManagement {
+                    system.set("GitHub")
+                    url.set("https://github.com/jaitl/kDynamoMapper/issues")
+                }
+                developers {
+                    developer {
+                        id.set("jaitl")
+                        name.set("Igor Rize")
+                        email.set("jaitl@outlook.com")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/jaitl/kDynamoMapper")
+                    connection.set("scm:https://github.com/jaitl/kDynamoMapper.git")
+                    developerConnection.set("scm:https://github.com/jaitl/kDynamoMapper.git")
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
+            credentials {
+                val sonatypeUsername: String? by project
+                val sonatypePassword: String? by project
+                username = sonatypeUsername
+                password = sonatypePassword
+            }
+        }
     }
 }
