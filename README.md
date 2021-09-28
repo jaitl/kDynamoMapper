@@ -118,7 +118,6 @@ data class MyAdtData(val id: String, val adt: Adt)
 
 ### Writing
 ```kotlin
-// put
 val data = MyAdtData("1", Adt.AdtOne(1234, "one one"))
 
 val dynamoData = mapper.writeObject(data)
@@ -133,7 +132,6 @@ dynamoDbClient.putItem(putRequest)
 
 ### Updating
 ```kotlin
-// update
 val itemKey = mapper.writeObject(MyKey("1"))
 val updatedAdt = Adt.AdtTwo(4321L, Instant.now(), 4444.0)
 
@@ -155,7 +153,6 @@ dynamoDbClient.updateItem(updateRequest)
 
 ### Reading
 ```kotlin
-
 val keyValue = mapper.writeObject(MyKey("1"))
 
 val getRequest = GetItemRequest.builder()

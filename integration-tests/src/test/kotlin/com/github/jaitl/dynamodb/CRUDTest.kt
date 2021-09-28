@@ -29,6 +29,7 @@ class CRUDTest : DynamoDbTestSuite() {
     fun testPutAndGetObject() {
         dynamoDbClient.helpCreateTable(table)
 
+        // put
         val data = MyData("1", 1234, NestedObject(333.33, Instant.now()))
 
         val dynamoData = mapper.writeObject(data)
@@ -40,6 +41,7 @@ class CRUDTest : DynamoDbTestSuite() {
 
         dynamoDbClient.putItem(putRequest)
 
+        // get
         val keyValue = mapper.writeObject(MyKey(data.id))
 
         val getRequest = GetItemRequest.builder()
