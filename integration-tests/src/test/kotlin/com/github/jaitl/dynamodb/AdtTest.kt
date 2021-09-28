@@ -4,8 +4,7 @@ import com.github.jaitl.dynamodb.base.DynamoDbTestSuite
 import com.github.jaitl.dynamodb.base.TableConfig
 import com.github.jaitl.dynamodb.base.helpCreateTable
 import com.github.jaitl.dynamodb.mapper.Mapper
-import com.github.jaitl.dynamodb.mapper.attribute.mapAttribute
-import com.github.jaitl.dynamodb.mapper.updateAttribute
+import com.github.jaitl.dynamodb.mapper.attribute.updateAttribute
 import com.github.jaitl.dynamodb.mapper.writeValue
 import software.amazon.awssdk.services.dynamodb.model.AttributeAction
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest

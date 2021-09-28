@@ -1,4 +1,4 @@
-package com.github.jaitl.dynamodb.mapper
+package com.github.jaitl.dynamodb.mapper.attribute
 
 import software.amazon.awssdk.services.dynamodb.model.AttributeAction
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
