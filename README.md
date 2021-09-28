@@ -103,7 +103,9 @@ You can run and play with the examples in integration tests.
 
 ## ADT support
 ADT are determined by inheritance from a sealed interface/class. 
-Each ADT contains the `adt_class_name` field with the original class name.
+Each ADT has to contain the `adt_class_name` field with the original class.
+During write, the `adt_class_name` field will be created automatically.
+To read an ADT it has to contain the `adt_class_name` field otherwise the `RequiredFieldNotFoundException` exception will be thrown.
 
 ### ADT data classes
 ```kotlin
