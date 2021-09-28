@@ -285,5 +285,5 @@ val actualData = mapper.readObject(result.item(), MyDataClass::class)
 ***Please***, if you have written a converter for a common data type that will be useful to other users, contribute it back to the project.
 
 ## Contribution
-1. There are several [opened issues](https://github.com/jaitl/kDynamoMapper/issues). When you want to resolve an opened issue don't forget to write about it in the issue.
-2. If there isn't a needed converter for you feel free to open [a new issue](https://github.com/jaitl/kDynamoMapper/issues/new) then implement and contribute the converter.
+ 1. There are several [opened issues](https://github.com/jaitl/kDynamoMapper/issues). When you want to resolve an opened issue don't forget to write about it in the issue.
+ 2. If there isn't a needed converter for you feel free to open [a new issue](https://github.com/jaitl/kDynamoMapper/issues/new) then implement and contribute the converter.
