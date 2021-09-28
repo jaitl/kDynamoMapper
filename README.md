@@ -285,9 +285,8 @@ val actualData = mapper.readObject(result.item(), MyDataClass::class)
 
 You can run and play with the examples in [integration tests](https://github.com/jaitl/kDynamoMapper/blob/main/integration-tests/src/test/kotlin/pro/jaitl/dynamodb/CustomConverterTest.kt).
 
-
 ### Notice
-***Please***, if you have written a converter for a common data type that will be useful to other users, contribute it back to the project.
+***Please!*** If you have written a converter for a common data type that will be useful to other users, contribute it back to the project.
 
 ## Contribution
 1. There are several [opened issues](https://github.com/jaitl/kDynamoMapper/issues). When you want to resolve an opened issue don't forget to write about it in the issue.
