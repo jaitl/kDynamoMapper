@@ -116,7 +116,7 @@ data class MyKey(val id: String)
 data class MyAdtData(val id: String, val adt: Adt)
 ```
 
-### Writing
+### Writing ADT
 ```kotlin
 val data = MyAdtData("1", Adt.AdtOne(1234, "one one"))
 
@@ -130,7 +130,7 @@ val putRequest = PutItemRequest.builder()
 dynamoDbClient.putItem(putRequest)
 ```
 
-### Updating
+### Updating ADT
 ```kotlin
 val itemKey = mapper.writeObject(MyKey("1"))
 val updatedAdt = Adt.AdtTwo(4321L, Instant.now(), 4444.0)
@@ -151,7 +151,7 @@ val updateRequest = UpdateItemRequest.builder()
 dynamoDbClient.updateItem(updateRequest)
 ```
 
-### Reading
+### Reading ADT
 ```kotlin
 val keyValue = mapper.writeObject(MyKey("1"))
 
@@ -172,7 +172,7 @@ class SimpleDataType(val instant: Instant)
 class ComplexDataType(val string: String, val int: Int, val simpleDataType: SimpleDataType)
 ```
 
-### Data classes
+### Data classes with custom types
 ```kotlin
 data class MyDataClass(
     val id: String,
@@ -237,8 +237,8 @@ class ComplexDataTypeConverter : TypeConverter<ComplexDataType> {
 }
 ```
 
-### Mapper creating
-Configure two custom converters then union them with default converters.
+### Creates Mapper with custom converters
+Configure custom converters then union them with default converters.
 ```kotlin
 val customConvertersMap = listOf(SimpleDataTypeConverter(), ComplexDataTypeConverter())
     .associateBy { it.type() }
@@ -247,12 +247,12 @@ val registry = ConverterRegistry(DEFAULT_CONVERTERS + customConvertersMap)
 val mapper = Mapper(registry)
 ```
 
-### Writing
+### Writing a data class with custom types
 ```kotlin
 val data = MyDataClass(
-    "1",
-    SimpleDataType(Instant.now()),
-    ComplexDataType("test", 1234, SimpleDataType(Instant.now().plusSeconds(1000)))
+    id = "1",
+    simpleDataType = SimpleDataType(Instant.now()),
+    complexDataType = ComplexDataType("test", 1234, SimpleDataType(Instant.now().plusSeconds(1000)))
 )
 
 val dynamoData = mapper.writeObject(data)
@@ -265,7 +265,7 @@ val putRequest = PutItemRequest.builder()
 dynamoDbClient.putItem(putRequest)
 ```
 
-### Reading
+### Reading a data class with custom types
 ```kotlin
 val keyValue = mapper.writeObject(MyDataKey(data.id))
 
@@ -280,7 +280,7 @@ val actualData = mapper.readObject(result.item(), MyDataClass::class)
 ```
 
 ### Notice
-***Please***, if you have written a converter for a common data type that will be useful to other users, contribute it to the project.
+***Please***, if you have written a converter for a common data type that will be useful to other users, contribute it back to the project.
 
 ## Contribution
 1. There are several [opened issues](https://github.com/jaitl/kDynamoMapper/issues). When you want to resolve an opened issue don't forget to write about it in the issue.

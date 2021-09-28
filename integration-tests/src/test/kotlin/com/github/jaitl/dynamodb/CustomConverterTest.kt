@@ -27,9 +27,9 @@ class CustomConverterTest : DynamoDbTestSuite() {
 
         // put
         val data = MyDataClass(
-            "1",
-            SimpleDataType(Instant.now()),
-            ComplexDataType("test", 1234, SimpleDataType(Instant.now().plusSeconds(1000)))
+            id = "1",
+            simpleDataType = SimpleDataType(Instant.now()),
+            complexDataType = ComplexDataType("test", 1234, SimpleDataType(Instant.now().plusSeconds(1000)))
         )
 
         val dynamoData = mapper.writeObject(data)
