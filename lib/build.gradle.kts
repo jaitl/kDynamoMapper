@@ -5,6 +5,8 @@ plugins {
     signing
 }
 
+val version = System.getenv("RELEASE_VERSION") ?: "SNAPSHOT"
+
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
@@ -36,7 +38,7 @@ publishing {
 
             groupId = "pro.jaitl"
             artifactId = "k-dynamo-mapper"
-            version = "0.0.1"
+            version = version
             pom {
                 name.set("kDynamoMapper")
                 description.set("Lightweight AWS DynamoDB mapper for Kotlin.")
