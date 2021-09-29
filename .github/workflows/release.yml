@@ -31,4 +31,4 @@ jobs:
           -PsonatypeUsername="${{secrets.SONATYPE_USERNAME}}"
           -PsonatypePassword="${{secrets.SONATYPE_PASSWORD}}"
         env:
-          RELEASE_VERSION: "${GITHUB_REF:11}"
+          RELEASE_VERSION: ${{GITHUB_REF:11}}
