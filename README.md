@@ -3,6 +3,7 @@
 [![codecov](https://codecov.io/gh/jaitl/kDynamoMapper/branch/main/graph/badge.svg?token=2JXCJZDUHQ)](https://codecov.io/gh/jaitl/kDynamoMapper)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f7d2b2905373454fa647777ec2377957)](https://www.codacy.com/gh/jaitl/kDynamoMapper/dashboard)
 
+[![release](https://github.com/jaitl/kDynamoMapper/actions/workflows/release.yml/badge.svg)](https://github.com/jaitl/kDynamoMapper/actions/workflows/release.yml)
 [ ![Maven Central](https://img.shields.io/maven-central/v/pro.jaitl/k-dynamo-mapper?color=green)](https://search.maven.org/artifact/pro.jaitl/k-dynamo-mapper)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jaitl/kDynamoMapper/blob/main/LICENSE)
 
