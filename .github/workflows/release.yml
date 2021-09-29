@@ -25,7 +25,7 @@ jobs:
       - name: Publish
         run: >
           ./gradlew lib:publish
-          -Psigning.secretKeyRingFile=secret.gpg
+          -Psigning.secretKeyRingFile=$GITHUB_WORKSPACE/secret.gpg
           -Psigning.keyId=${{secrets.SIGNING_KEYID}}
           -Psigning.password=${{secrets.SIGNING_PASSWORD}}
           -PsonatypeUsername=${{secrets.SONATYPE_USERNAME}}
