@@ -25,10 +25,10 @@ jobs:
       - name: Publish
         run: >
           ./gradlew lib:publish
-          -Psigning.secretKeyRingFile=$GITHUB_WORKSPACE/secret.gpg
-          -Psigning.keyId=${{secrets.SIGNING_KEYID}}
-          -Psigning.password=${{secrets.SIGNING_PASSWORD}}
-          -PsonatypeUsername=${{secrets.SONATYPE_USERNAME}}
-          -PsonatypePassword=${{secrets.SONATYPE_PASSWORD}}
+          -Psigning.secretKeyRingFile="$GITHUB_WORKSPACE/secret.gpg"
+          -Psigning.keyId="${{secrets.SIGNING_KEYID}}"
+          -Psigning.password="${{secrets.SIGNING_PASSWORD}}"
+          -PsonatypeUsername="${{secrets.SONATYPE_USERNAME}}"
+          -PsonatypePassword="${{secrets.SONATYPE_PASSWORD}}"
         env:
           RELEASE_VERSION: ${GITHUB_REF:11}
