@@ -62,4 +62,18 @@ class ExtensionKtTest {
 
         assertEquals(expectedData, data)
     }
+
+    @Test
+    fun testReadSimpleDataClass() {
+        data class SimpleData(val str: String, val digit: Int)
+
+        val expectedData = SimpleData("qwerty", 123)
+        val obj = mapOf(
+            "str" to stringAttribute("qwerty"),
+            "digit" to numberAttribute(123)
+        )
+
+        val data = mapper.readObject<SimpleData>(obj)
+        assertEquals(expectedData, data)
+    }
 }

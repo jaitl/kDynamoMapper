@@ -17,6 +17,14 @@ inline fun <reified T : Any> KDynamoMapperWriter.writeValue(value: T): Attribute
 }
 
 /**
+ * Reads a DynamoDb attribute map to a case class.
+ * Wrapper for original readObject method from KDynamoMapperReader that simplifies creating KClass.
+ */
+inline fun <reified T : Any> KDynamoMapperReader.readObject(obj: Map<String, AttributeValue>): T {
+    return readObject(obj, T::class)
+}
+
+/**
  * Reads a DynamoDb attribute to a type.
  * Wrapper for original readValue method from KDynamoMapperReader that simplifies creating KType.
  *

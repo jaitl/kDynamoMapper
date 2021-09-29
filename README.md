@@ -73,7 +73,8 @@ val getRequest = GetItemRequest.builder()
 
 val result = dynamoDbClient.getItem(getRequest)
 
-val data = mapper.readObject(result.item(), MyData::class)
+val data = mapper.readObject<MyData>(result.item())
+// or val data = mapper.readObject(result.item(), MyData::class)
 ```
 
 ### Updating a value
@@ -182,7 +183,8 @@ val getRequest = GetItemRequest.builder()
 
 val result = dynamoDbClient.getItem(getRequest)
 
-val updatedItem = mapper.readObject(result.item(), MyAdtData::class)
+val updatedItem = mapper.readObject<MyAdtData>(result.item())
+// or val updatedItem = mapper.readObject(result.item(), MyAdtData::class)
 ```
 
 You can run and play with the examples in [integration tests](https://github.com/jaitl/kDynamoMapper/blob/main/integration-tests/src/test/kotlin/pro/jaitl/dynamodb/AdtTest.kt).
@@ -298,7 +300,8 @@ val getRequest = GetItemRequest.builder()
 
 val result = dynamoDbClient.getItem(getRequest)
 
-val actualData = mapper.readObject(result.item(), MyDataClass::class)
+val actualData = mapper.readObject<MyDataClass>(result.item())
+// or val actualData = mapper.readObject(result.item(), MyDataClass::class)
 ```
 
 You can run and play with the examples in [integration tests](https://github.com/jaitl/kDynamoMapper/blob/main/integration-tests/src/test/kotlin/pro/jaitl/dynamodb/CustomConverterTest.kt).

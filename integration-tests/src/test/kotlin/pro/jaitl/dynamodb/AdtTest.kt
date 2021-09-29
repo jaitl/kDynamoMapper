@@ -5,6 +5,7 @@ import pro.jaitl.dynamodb.base.TableConfig
 import pro.jaitl.dynamodb.base.helpCreateTable
 import pro.jaitl.dynamodb.mapper.Mapper
 import pro.jaitl.dynamodb.mapper.attribute.updateAttribute
+import pro.jaitl.dynamodb.mapper.readObject
 import pro.jaitl.dynamodb.mapper.writeValue
 import software.amazon.awssdk.services.dynamodb.model.AttributeAction
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
@@ -64,7 +65,7 @@ class AdtTest : DynamoDbTestSuite() {
 
         val result = dynamoDbClient.getItem(getRequest)
 
-        val updatedItem = mapper.readObject(result.item(), MyAdtData::class)
+        val updatedItem = mapper.readObject<MyAdtData>(result.item())
 
         val expectedItem = data.copy(adt = updatedAdt)
 
