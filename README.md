@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/jaitl/kDynamoMapper/branch/main/graph/badge.svg?token=2JXCJZDUHQ)](https://codecov.io/gh/jaitl/kDynamoMapper)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f7d2b2905373454fa647777ec2377957)](https://www.codacy.com/gh/jaitl/kDynamoMapper/dashboard)
 
-[ ![Maven Central](https://img.shields.io/maven-central/v/pro.jaitl/k-dynamo-mapper?color=green)](https://repo1.maven.org/maven2/pro/jaitl/k-dynamo-mapper/)
+[ ![Maven Central](https://img.shields.io/maven-central/v/pro.jaitl/k-dynamo-mapper?color=green)](https://search.maven.org/artifact/pro.jaitl/k-dynamo-mapper)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/jaitl/kDynamoMapper/blob/main/LICENSE)
 
 Lightweight AWS DynamoDB mapper for Kotlin written in pure Kotlin.
@@ -14,7 +14,24 @@ Lightweight AWS DynamoDB mapper for Kotlin written in pure Kotlin.
 *kDynamoMapper* doesn't wrap `DynamoDbClient`. You have to use original `DynamoDbClient` from [AWS SDK for Java 2.0](https://github.com/aws/aws-sdk-java-v2) to work with DynamoDB.
 
 ## Installation
-Artifact is being deployed to maven central.
+### Maven
+```xml
+<dependency>
+  <groupId>pro.jaitl</groupId>
+  <artifactId>k-dynamo-mapper</artifactId>
+  <version>version</version>
+</dependency>
+```
+
+### Gradle Groovy
+```groovy
+implementation 'pro.jaitl:k-dynamo-mapper:<version>'
+```
+
+### Gradle Kotlin
+```kotlin
+implementation("pro.jaitl:k-dynamo-mapper:<version>")
+```
 
 ## Usage
 *kDynamoMapper* supports ***only*** data classes. When a data class contains another data class as a property it will be mapped as well.
