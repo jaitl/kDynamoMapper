@@ -259,7 +259,7 @@ class ComplexDataTypeConverter : TypeConverter<ComplexDataType> {
 }
 ```
 
-### Creates Mapper with custom converters
+### Creating the Mapper with custom converters
 Configure custom converters then union them with default converters.
 ```kotlin
 val customConvertersMap = listOf(SimpleDataTypeConverter(), ComplexDataTypeConverter())
