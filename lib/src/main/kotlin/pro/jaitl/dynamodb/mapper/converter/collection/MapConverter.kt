@@ -25,8 +25,8 @@ class MapConverter : TypeConverter<Map<*, *>> {
 
         if (keyClazz != String::class) {
             throw UnsupportedKeyTypeException(
-                "Map doesn't support type '${keyClazz}' as key. " +
-                        "Only 'String' type supported as key"
+                "Map doesn't support type '$keyClazz' as key. " +
+                    "Only 'String' type supported as key"
             )
         }
 
@@ -48,8 +48,8 @@ class MapConverter : TypeConverter<Map<*, *>> {
 
         if (keyClazz != String::class) {
             throw UnsupportedKeyTypeException(
-                "Map doesn't support type '${keyClazz}' as key. " +
-                        "Only 'String' type supported as key"
+                "Map doesn't support type '$keyClazz' as key. " +
+                    "Only 'String' type supported as key"
             )
         }
 

@@ -6,7 +6,6 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-
 abstract class DynamoDbTestSuite {
     private val containerName = DockerImageName.parse("amazon/dynamodb-local:1.16.0")
     private val dynamoDbContainer = GenericContainer<Nothing>(containerName)

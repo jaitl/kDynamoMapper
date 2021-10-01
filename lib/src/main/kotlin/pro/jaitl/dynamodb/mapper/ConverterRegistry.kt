@@ -4,9 +4,12 @@ import pro.jaitl.dynamodb.mapper.converter.TypeConverter
 import pro.jaitl.dynamodb.mapper.converter.collection.ListConverter
 import pro.jaitl.dynamodb.mapper.converter.collection.MapConverter
 import pro.jaitl.dynamodb.mapper.converter.collection.SetConverter
-import pro.jaitl.dynamodb.mapper.converter.type.*
+import pro.jaitl.dynamodb.mapper.converter.type.BooleanConverter
+import pro.jaitl.dynamodb.mapper.converter.type.InstantConverter
+import pro.jaitl.dynamodb.mapper.converter.type.NumberConverter
+import pro.jaitl.dynamodb.mapper.converter.type.StringConverter
+import pro.jaitl.dynamodb.mapper.converter.type.UUIDConverter
 import kotlin.reflect.KClass
-
 
 /**
  * Map with type converters who implement the TypeConverter interface.

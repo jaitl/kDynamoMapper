@@ -2,10 +2,10 @@ package pro.jaitl.dynamodb.mapper.converter.collection
 
 import pro.jaitl.dynamodb.mapper.Mapper
 import pro.jaitl.dynamodb.mapper.attribute.mapAttribute
+import pro.jaitl.dynamodb.mapper.attribute.numberAttribute
 import pro.jaitl.dynamodb.mapper.attribute.numberSetAttribute
 import pro.jaitl.dynamodb.mapper.attribute.setAttribute
 import pro.jaitl.dynamodb.mapper.attribute.stringSetAttribute
-import pro.jaitl.dynamodb.mapper.attribute.numberAttribute
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals

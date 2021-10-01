@@ -7,7 +7,7 @@ import pro.jaitl.dynamodb.mapper.attribute.stringAttribute
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

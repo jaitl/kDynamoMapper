@@ -23,7 +23,7 @@ class Writer(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
     override fun writeObject(obj: Any): Map<String, AttributeValue> {
         val clazz = obj::class
         if (!clazz.isData) {
-            throw NotDataClassTypeException("Type '${clazz}' isn't a data class type")
+            throw NotDataClassTypeException("Type '$clazz' isn't a data class type")
         }
         val members = clazz.memberProperties
         val attrsMap = members

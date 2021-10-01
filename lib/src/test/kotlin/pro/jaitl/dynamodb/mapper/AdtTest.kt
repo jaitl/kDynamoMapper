@@ -3,8 +3,8 @@ package pro.jaitl.dynamodb.mapper
 import pro.jaitl.dynamodb.mapper.attribute.mapAttribute
 import pro.jaitl.dynamodb.mapper.attribute.numberAttribute
 import pro.jaitl.dynamodb.mapper.attribute.stringAttribute
-import pro.jaitl.dynamodb.mapper.helper.SimpleDataAdt
 import pro.jaitl.dynamodb.mapper.helper.SimpleAdt
+import pro.jaitl.dynamodb.mapper.helper.SimpleDataAdt
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

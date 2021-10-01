@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.30"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
 }
 
 repositories {
@@ -11,6 +12,7 @@ repositories {
 
 subprojects {
     apply(plugin = "kotlin")
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     repositories {
         mavenCentral()

@@ -1,19 +1,23 @@
 package pro.jaitl.dynamodb
 
-import pro.jaitl.dynamodb.base.*
 import pro.jaitl.dynamodb.base.DynamoDbTestSuite
 import pro.jaitl.dynamodb.base.TableConfig
 import pro.jaitl.dynamodb.base.helpCreateTable
+import pro.jaitl.dynamodb.base.helpGetItem
+import pro.jaitl.dynamodb.base.helpPutItem
 import pro.jaitl.dynamodb.mapper.KDynamoMapper
 import pro.jaitl.dynamodb.mapper.Mapper
 import pro.jaitl.dynamodb.mapper.attribute.updateAttribute
 import pro.jaitl.dynamodb.mapper.writeValue
-import software.amazon.awssdk.services.dynamodb.model.*
+import software.amazon.awssdk.services.dynamodb.model.AttributeAction
+import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest
+import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
+import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-
 
 class CRUDTest : DynamoDbTestSuite() {
     private val table = TableConfig("table", "id")
