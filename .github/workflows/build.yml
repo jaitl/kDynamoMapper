@@ -15,8 +15,6 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
-      - name: KtLint Check
-        run: ./gradlew gktlintCheck
       - uses: codecov/codecov-action@v2
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
