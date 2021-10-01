@@ -8,7 +8,6 @@ import pro.jaitl.dynamodb.mapper.attribute.stringAttribute
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 internal class ListConverterTest {
     val mapper = Mapper()
 

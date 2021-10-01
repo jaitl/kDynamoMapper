@@ -1,6 +1,5 @@
 package pro.jaitl.dynamodb.mapper.converter
 
-import pro.jaitl.dynamodb.mapper.KDynamoMapper
 import pro.jaitl.dynamodb.mapper.KDynamoMapperReader
 import pro.jaitl.dynamodb.mapper.KDynamoMapperWriter
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue

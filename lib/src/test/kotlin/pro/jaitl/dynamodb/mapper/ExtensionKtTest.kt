@@ -6,7 +6,6 @@ import pro.jaitl.dynamodb.mapper.attribute.stringAttribute
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 class ExtensionKtTest {
     val mapper = Mapper()
 
@@ -39,10 +38,12 @@ class ExtensionKtTest {
 
         val attr = mapper.writeValue(data)
 
-        val expectedAttr = mapAttribute(mapOf(
-            "string" to stringAttribute("test"),
-            "int" to numberAttribute(123)
-        ))
+        val expectedAttr = mapAttribute(
+            mapOf(
+                "string" to stringAttribute("test"),
+                "int" to numberAttribute(123)
+            )
+        )
 
         assertEquals(expectedAttr, attr)
     }
@@ -51,10 +52,12 @@ class ExtensionKtTest {
     fun testReadObject() {
         data class SimpleData(val string: String, val int: Int)
 
-        val attr = mapAttribute(mapOf(
-            "string" to stringAttribute("test"),
-            "int" to numberAttribute(123)
-        ))
+        val attr = mapAttribute(
+            mapOf(
+                "string" to stringAttribute("test"),
+                "int" to numberAttribute(123)
+            )
+        )
 
         val data: SimpleData = mapper.readValue(attr)
 

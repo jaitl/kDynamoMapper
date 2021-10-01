@@ -1,11 +1,10 @@
 package pro.jaitl.dynamodb.mapper.converter.type
 
+import org.junit.Test
 import pro.jaitl.dynamodb.mapper.Mapper
 import pro.jaitl.dynamodb.mapper.attribute.stringAttribute
-import org.junit.Test
-import java.util.*
+import java.util.UUID
 import kotlin.test.assertEquals
-
 
 internal class UUIDConverterTest {
     val mapper = Mapper()

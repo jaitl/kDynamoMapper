@@ -1,8 +1,8 @@
 package pro.jaitl.dynamodb.mapper.converter.type
 
+import org.junit.Test
 import pro.jaitl.dynamodb.mapper.Mapper
 import pro.jaitl.dynamodb.mapper.attribute.stringAttribute
-import org.junit.Test
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import kotlin.test.assertEquals

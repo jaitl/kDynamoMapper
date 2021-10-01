@@ -1,8 +1,8 @@
 package pro.jaitl.dynamodb.mapper.converter.type
 
+import org.junit.Test
 import pro.jaitl.dynamodb.mapper.Mapper
 import pro.jaitl.dynamodb.mapper.attribute.booleanAttribute
-import org.junit.Test
 import kotlin.test.assertEquals
 
 internal class BooleanConverterTest {

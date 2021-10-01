@@ -27,7 +27,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
             return handleAdt(obj, clazz)
         }
         if (!clazz.isData) {
-            throw NotDataClassTypeException("Type '${clazz}' isn't a data class type")
+            throw NotDataClassTypeException("Type '$clazz' isn't a data class type")
         }
         val constructor = clazz.primaryConstructor!!
         val args = constructor.parameters
@@ -51,7 +51,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
 
         if (realClazz == null) {
             throw RequiredFieldNotFoundException(
-                "ADT '$kClass' has to contain attribute '${ADT_FIELD_NAME}'",
+                "ADT '$kClass' has to contain attribute '$ADT_FIELD_NAME'",
                 setOf(ADT_FIELD_NAME)
             )
         }
@@ -61,7 +61,7 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
 
         if (!kClass.isSuperclassOf(adtClazz)) {
             throw UnknownTypeException(
-                "Class '${kClass.qualifiedName}' isn't a subclass of '${adtClazz}'"
+                "Class '${kClass.qualifiedName}' isn't a subclass of '$adtClazz'"
             )
         }
 
@@ -88,10 +88,11 @@ class Reader(private val registry: ConverterRegistry = DEFAULT_REGISTRY) : KDyna
         if (notFoundFields.isNotEmpty()) {
             throw RequiredFieldNotFoundException(
                 "Required fields not found: [${
-                    notFoundFields.joinToString(
-                        ", ", "'", "'"
-                    )
-                }] for $clazz", notFoundFields
+                notFoundFields.joinToString(
+                    ", ", "'", "'"
+                )
+                }] for $clazz",
+                notFoundFields
             )
         }
     }
