@@ -3,7 +3,6 @@ plugins {
     `maven-publish`
     jacoco
     signing
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
 }
 
 val releaseVersion: String? by project
