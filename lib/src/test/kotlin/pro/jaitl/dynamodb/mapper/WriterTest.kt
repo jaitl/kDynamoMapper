@@ -6,7 +6,7 @@ import pro.jaitl.dynamodb.mapper.attribute.numberAttribute
 import pro.jaitl.dynamodb.mapper.attribute.stringAttribute
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
